@@ -4,10 +4,11 @@ from tqdm import tqdm
 import torch
 from torch.utils.data import DataLoader
 
-
+import sys
+sys.path.append("..")
 from kaolin.datasets import ModelNet, Scan2CAD
 from kaolin.models.PointNet import PointNetClassifier
-import kaolin.transforms as tfs
+#import kaolin.transforms as tfs
 from utils import visualize_batch
 import pandas as pd
 
