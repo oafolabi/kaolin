@@ -15,8 +15,8 @@
 import torch
 import sys
 sys.path.append("..")
-# from kaolin.cython.nnsearch import nnsearch
-# import kaolin.cuda.sided_distance as sd
+from kaolin.cython.nnsearch import nnsearch
+import kaolin.cuda.sided_distance as sd
 from scipy.spatial import cKDTree as Tree
 import numpy as np
 
