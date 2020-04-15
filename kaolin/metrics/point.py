@@ -13,6 +13,8 @@
 # limitations under the License.
 
 import torch
+import sys
+sys.path.append("..")
 from kaolin.nnsearch import nnsearch
 import kaolin.cuda.sided_distance as sd
 from scipy.spatial import cKDTree as Tree
