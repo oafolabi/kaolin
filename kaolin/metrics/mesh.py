@@ -36,8 +36,6 @@
 # SOFTWARE.
 
 import torch
-import sys
-sys.path.append("..")
 import kaolin as kal
 from kaolin.rep import Mesh
 import kaolin.cuda.tri_distance as td

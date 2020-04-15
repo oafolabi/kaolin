@@ -13,8 +13,6 @@
 # limitations under the License.
 
 import torch
-import sys
-sys.path.append("..")
 import kaolin as kal
 
 
