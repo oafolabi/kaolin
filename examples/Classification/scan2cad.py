@@ -20,6 +20,8 @@ from glob import glob
 from tqdm import tqdm
 import pandas as pd
 
+import sys
+sys.path.append("../..")
 from kaolin.rep.TriangleMesh import TriangleMesh
 from kaolin.transforms import transforms as tfs
 
