@@ -26,7 +26,7 @@ from kaolin.helpers import _composedecorator
 
 import sys
 sys.path.append("../..")
-import kaolin.cuda.load_textures as load_textures_cuda
+# import kaolin.cuda.load_textures as load_textures_cuda
 import kaolin as kal
 
 
