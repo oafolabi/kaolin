@@ -5,8 +5,7 @@ import torch
 from torch.utils.data import DataLoader
 
 import sys
-sys.path.append("..")
-
+sys.path.append("~//kaolin/")
 import kaolin
 from kaolin.datasets import ModelNet, Scan2CAD
 from kaolin.models.PointNet import PointNetClassifier
