@@ -39,7 +39,8 @@ train_loader = DataLoader(Scan2CAD(data_frame,
 #                                  split='test', transform=transform, device=args.device),
 #                         batch_size=args.batch_size)
 
-model = PointNetClassifier(num_classes=train_loader.num_classes()).to(args.device)
+num_cad_classes = train_loader.num_classes()
+model = PointNetClassifier(num_classes=num_cad_classes).to(args.device)
 optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 criterion = torch.nn.CrossEntropyLoss()
 
