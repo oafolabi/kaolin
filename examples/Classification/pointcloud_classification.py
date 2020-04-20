@@ -32,7 +32,7 @@ args = parser.parse_args()
 data_path = '/global/scratch/akashgokul/mined_scannet_chairs/data.csv'
 data_frame = pd.read_csv(data_path)
 train_loader = DataLoader(Scan2CAD(data_frame,
-                                   split=None, transform=None, device=args.device),
+                                   transform=None, device=args.device),
                           batch_size=args.batch_size, shuffle=True)
 
 # val_loader = DataLoader(ModelNet(args.modelnet_root, categories=args.categories,
