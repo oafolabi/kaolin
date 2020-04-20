@@ -59,7 +59,8 @@ class Scan2CAD(object):
         print(self.filepaths[0])
         print("CAD ID")
         print(self.cad_ids[0])
-
+        self.unique_labels = self.cad_ids.unique()
+        print(self.unique_labels)
         # for path in self.filepaths:
         #     if(not os.path.exists(path)):
         #         raise ValueError('OFF file not found at "{0}".'.format(basedir))

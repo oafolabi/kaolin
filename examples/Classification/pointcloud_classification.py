@@ -24,14 +24,15 @@ parser.add_argument('--device', type=str, default='cuda', help='Device to use.')
 args = parser.parse_args()
 
 
-# transform = tfs.Compose([
-#     tfs.TriangleMeshToPointCloud(num_samples=args.num_points),
-#     tfs.NormalizePointCloud()
-# ])
+transform = tfs.Compose([
+    tfs.TriangleMeshToPointCloud(num_samples=args.num_points),
+    tfs.NormalizePointCloud()
+])
 
 data_path = '/global/scratch/akashgokul/mined_scannet_chairs/data.csv'
 data_frame = pd.read_csv(data_path)
-dataset = Scan2CAD(data_frame,transform=None, device=args.device)
+
+dataset = Scan2CAD(data_frame,transform=transform, device=args.device)
 train_loader = DataLoader(dataset,batch_size=args.batch_size, shuffle=True)
 
 # val_loader = DataLoader(ModelNet(args.modelnet_root, categories=args.categories,
