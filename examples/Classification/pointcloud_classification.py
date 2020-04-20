@@ -31,15 +31,14 @@ args = parser.parse_args()
 
 data_path = '/global/scratch/akashgokul/mined_scannet_chairs/data.csv'
 data_frame = pd.read_csv(data_path)
-train_loader = DataLoader(Scan2CAD(data_frame,
-                                   transform=None, device=args.device),
-                          batch_size=args.batch_size, shuffle=True)
+dataset = Scan2CAD(data_frame,transform=None, device=args.device)
+train_loader = DataLoader(dataset,batch_size=args.batch_size, shuffle=True)
 
 # val_loader = DataLoader(ModelNet(args.modelnet_root, categories=args.categories,
 #                                  split='test', transform=transform, device=args.device),
 #                         batch_size=args.batch_size)
 
-num_cad_classes = train_loader.num_classes()
+num_cad_classes = dataset.num_classes()
 model = PointNetClassifier(num_classes=num_cad_classes).to(args.device)
 optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 criterion = torch.nn.CrossEntropyLoss()
