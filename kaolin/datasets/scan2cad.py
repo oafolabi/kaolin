@@ -53,8 +53,8 @@ class Scan2CAD(object):
         self.transform = transform
         self.device = device
         self.names = []
-        self.filepaths = data_frame.ix[:,0]
-        self.cad_ids = data_frame.ix[:,1]
+        self.filepaths = data_frame.iloc[:, 0]
+        self.cad_ids = data_frame.iloc[:,1]
         print("File PAth")
         print(self.filepaths[0])
         print("CAD ID")
