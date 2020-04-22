@@ -88,7 +88,10 @@ class Scan2CAD(object):
         data = TriangleMesh.from_off(self.filepaths[index])
         cad_id = self.cad_ids[index]
         label = self.label_map[cad_id]
+
+        label = torch.tensor(label, dtype=torch.long, device=self.device)
         data.to(self.device)
+        
         if self.transform:
             data = self.transform(data)
 
