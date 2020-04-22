@@ -55,14 +55,8 @@ class Scan2CAD(object):
         self.names = []
         self.filepaths = data_frame.iloc[:, 0]
         self.cad_ids = data_frame.iloc[:,1]
-        print("File PAth")
-        print(self.filepaths[0])
-        print("CAD ID")
-        print(self.cad_ids[0])
         self.unique_labels = self.cad_ids.unique()
-        print(self.unique_labels)
         self.label_map = {self.unique_labels[i] : i for i in range(len(self.unique_labels))}
-        print(self.label_map)
         # for path in self.filepaths:
         #     if(not os.path.exists(path)):
         #         raise ValueError('OFF file not found at "{0}".'.format(basedir))
@@ -93,10 +87,11 @@ class Scan2CAD(object):
         """Returns the item at index idx. """
         data = TriangleMesh.from_off(self.filepaths[index])
         cad_id = self.cad_ids[index]
+        label = self.label_map[cad_id]
         data.to(self.device)
         if self.transform:
             data = self.transform(data)
 
-        return data, cad_id
+        return data, label
 
 
