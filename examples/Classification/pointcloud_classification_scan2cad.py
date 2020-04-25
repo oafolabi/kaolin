@@ -31,7 +31,7 @@ transform = tfs.Compose([
 
 data_path = '/global/scratch/akashgokul/mined_scannet_chairs/data.csv'
 data_frame = pd.read_csv(data_path)
-data_frame.rename(columns={data_frame.columns[0]:'Filepath', data_frame.columns[1]:'ID'})
+data_frame.rename(columns={data_frame.columns[0]:'Filepath', data_frame.columns[1]:'ID'}, inplace=True)
 
 dataset = Scan2CAD(data_frame,transform=transform, device=args.device)
 train_loader = DataLoader(dataset,batch_size=args.batch_size, shuffle=True)
