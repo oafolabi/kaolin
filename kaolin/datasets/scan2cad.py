@@ -65,9 +65,12 @@ class Scan2CAD(object):
             ct_cad_ids = self.cad_ids.value_counts()
             s = ct_cad_ids.to_frame(name='Count')
             single_ct_labels = s[s['Count'] == 1]
-            single_ct_files = single_ct_labels.index.tolist()
-            print(single_ct_files)
-            assert 2==3
+            single_ct_labels = single_ct_labels.index
+            single_ct_labels = single_ct_labels.to_frame(name='ID')
+            cond = self.data_frame['ID'].isin(single_ct_labels['ID'])
+            self.data_frame = self.data_frame.drop(self.data_frame[cond].index, inplace = True)
+            print(len(self.data_frame))
+            assert 3==2
         
         #gets test set
         else:
