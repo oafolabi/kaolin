@@ -49,14 +49,14 @@ class Scan2CAD(object):
 
         split = split.lower()
         assert split in ['train' ,'test']
-
+        
+        data_frame.rename(columns={'Unnamed: 0': 'Filepath', '0':'ID'})
         self.data_frame = data_frame
-        print(self.data_frame.columns)
         self.transform = transform
         self.device = device
         self.names = []
-        self.filepaths = data_frame.iloc[:, 0]
-        self.cad_ids = data_frame.iloc[:,1]
+        self.filepaths = self.data_frame['Filepath']
+        self.cad_ids = self.data_frame['ID']
         self.unique_labels = self.cad_ids.unique()
         self.label_map = {self.unique_labels[i] : i for i in range(len(self.unique_labels))}
         
@@ -67,7 +67,7 @@ class Scan2CAD(object):
             single_ct_labels = single_ct_labels.index
             print(single_ct_labels)
             print("---\n"*2)
-            print(self.data_frame[~self.data_frame['Filepaths'].isin(single_ct_labels)])
+            print(self.data_frame[~self.data_frame['Filepath'].isin(single_ct_labels)])
             assert 3==2
         
         #gets test set
