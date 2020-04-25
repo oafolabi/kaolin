@@ -58,22 +58,21 @@ class Scan2CAD(object):
         self.filepaths = self.data_frame['Filepath']
         self.cad_ids = self.data_frame['ID']
         self.unique_labels = self.cad_ids.unique()
-        print(len(self.data_frame))
         self.label_map = {self.unique_labels[i] : i for i in range(len(self.unique_labels))}
         
         if(split == 'train'):
             ct_cad_ids = self.cad_ids.value_counts()
             s = ct_cad_ids.to_frame(name='Count')
             single_ct_labels = s[s['Count'] == 1]
-            print(len(single_ct_labels))
             single_ct_labels = single_ct_labels.index.tolist()
             drop_indices = []
             for index, row in self.data_frame.iterrows():
                 if(row[1] in single_ct_labels):
                     drop_indices.append(index)
 
-            self.data_frame = self.data_frame.drop(index = drop_indices)
-            print(len(self.data_frame))
+            rest_of_data_frame = self.data_frame.drop(index = drop_indices)
+            train_fraction = 0.8 - len(rest_of_data_frame) / len(self.data_frame)
+            print(train_fraction)
             assert 3==2
         
         #gets test set
