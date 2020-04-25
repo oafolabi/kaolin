@@ -58,8 +58,7 @@ class Scan2CAD(object):
         self.filepaths = self.data_frame['Filepath']
         self.cad_ids = self.data_frame['ID']
         self.unique_labels = self.cad_ids.unique()
-        print("Num classes ")
-        print(self.cad_ids.nunique())
+        print(len(self.data_frame))
         self.label_map = {self.unique_labels[i] : i for i in range(len(self.unique_labels))}
         
         if(split == 'train'):
