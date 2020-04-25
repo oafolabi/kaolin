@@ -67,6 +67,7 @@ class Scan2CAD(object):
             single_ct_labels = single_ct_labels['Label']
             rest_of_data = self.data_frame[~self.data_frame.isin(single_ct_labels)].dropna()
             print(single_ct_labels)
+            print("---\n"*2)
             print(rest_of_data)
             assert 3==2
         
