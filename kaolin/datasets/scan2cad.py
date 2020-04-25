@@ -29,6 +29,7 @@ class Scan2CAD(object):
 
     Args:
         data_frame (pd Dataframe): Dataframe containing directory - CAD ID pairs
+            -Column Names: 'Filepath', 'ID'
         split (str, optional): Split to load ('train' vs 'test',
             default: 'train').
         transform (callable, optional): A function/transform to apply on each
@@ -49,9 +50,6 @@ class Scan2CAD(object):
 
         split = split.lower()
         assert split in ['train' ,'test']
-        print(data_frame.columns)
-        print(data_frame.rename(columns={data_frame.columns[0]:'Filepath', 
-                                data_frame.columns[1]:'ID'}))
         self.data_frame = data_frame
         print(self.data_frame.columns)
         self.transform = transform
