@@ -49,7 +49,9 @@ class Scan2CAD(object):
 
         split = split.lower()
         assert split in ['train' ,'test']
-        data_frame.rename(columns={'Unnamed: 0': 'Filepath', '0':'ID'}, inplace=True)
+        print(data_frame.columns)
+        print(data_frame.rename(columns={data_frame.columns[0]:'Filepath', 
+                                data_frame.columns[1]:'ID'}))
         self.data_frame = data_frame
         print(self.data_frame.columns)
         self.transform = transform
