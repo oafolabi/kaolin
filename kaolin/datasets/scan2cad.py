@@ -65,7 +65,7 @@ class Scan2CAD(object):
             single_ct_labels = s[s['Count'] == 1]
             single_ct_labels['Label'] = single_ct_labels.index
             print(len(single_ct_labels.columns))
-            single_ct_labels = single_ct_labels.iloc[:,0]
+            single_ct_labels = single_ct_labels['Label']
             print(type(single_ct_labels))
             print(single_ct_labels[0])
             assert 3==2
