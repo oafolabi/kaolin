@@ -66,9 +66,10 @@ class Scan2CAD(object):
             s = ct_cad_ids.to_frame(name='Count')
             single_ct_labels = s[s['Count'] == 1]
             single_ct_labels = single_ct_labels.index
-            single_ct_labels = single_ct_labels.to_frame(name='Filepath')
+            print(single_ct_labels.to_numpy())
             for index, row in self.data_frame.iterrows():
-                print(row)
+                if(row[0] in single_ct_labels):
+                    print("help")
                 break
             assert 3==2
         
