@@ -64,10 +64,10 @@ class Scan2CAD(object):
             s = ct_cad_ids.to_frame(name='Count')
             single_ct_labels = s[s['Count'] == 1]
             single_ct_labels['Label'] = single_ct_labels.index
-            print(len(single_ct_labels.columns))
             single_ct_labels = single_ct_labels['Label']
-            print(type(single_ct_labels))
-            print(single_ct_labels[0])
+            rest_of_data = self.data_frame[~self.data_frame.isin(single_ct_labels)].dropna()
+            print(single_ct_labels)
+            print(rest_of_data)
             assert 3==2
         
         #gets test set
