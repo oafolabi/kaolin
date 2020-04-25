@@ -65,10 +65,13 @@ class Scan2CAD(object):
             ct_cad_ids = self.cad_ids.value_counts()
             s = ct_cad_ids.to_frame(name='Count')
             single_ct_labels = s[s['Count'] == 1]
-            single_ct_labels = single_ct_labels.index
-            single_ct_labels = single_ct_labels.to_frame(name='ID')
-            cond = self.data_frame['ID'].isin(single_ct_labels['ID'])
-            self.data_frame = self.data_frame.drop(self.data_frame[cond].index, inplace = True)
+            single_ct_labels = single_ct_labels.index.tolist()
+            drop_indices = []
+            for index, row in self.data_frame.iterrows():
+                if(row[1] in single_ct_labels):
+                    print("here")
+                    drop_indices.append(index)
+            self.data_frame = self.data_frame.drop(index = drop_indices)
             print(len(self.data_frame))
             assert 3==2
         
