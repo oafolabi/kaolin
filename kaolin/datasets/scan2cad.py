@@ -49,9 +49,9 @@ class Scan2CAD(object):
 
         split = split.lower()
         assert split in ['train' ,'test']
-        
         data_frame.rename(columns={'Unnamed: 0': 'Filepath', '0':'ID'})
         self.data_frame = data_frame
+        print(Self.data_frame.columns)
         self.transform = transform
         self.device = device
         self.names = []
