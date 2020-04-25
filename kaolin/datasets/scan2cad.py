@@ -48,7 +48,7 @@ class Scan2CAD(object):
                  device: Optional[Union[torch.device, str]] = 'cpu'):
 
         split = split.lower()
-        assert split in ['train','validation' ,'test']
+        assert split in ['train' ,'test']
 
         self.data_frame = data_frame
         self.transform = transform
@@ -59,10 +59,11 @@ class Scan2CAD(object):
         self.unique_labels = self.cad_ids.unique()
         self.label_map = {self.unique_labels[i] : i for i in range(len(self.unique_labels))}
         
-        if(split == 'train' or split == 'validation'):
-            single_ct_cad_ids = self.cad_ids.value_counts()
-            s = single_ct_cad_ids.to_frame(name='Count')
-            print(s)
+        if(split == 'train'):
+            ct_cad_ids = self.cad_ids.value_counts()
+            s = ct_cad_ids.to_frame(name='Count')
+            single_ct_labels = s[s['Count'] == 1]
+            print(single_ct_labels)
             assert 3==2
         
         #gets test set
