@@ -15,6 +15,7 @@
 from typing import Callable, Iterable, Optional, Union, List
 
 import torch
+import math
 import os
 from glob import glob
 import numpy as np
@@ -72,7 +73,9 @@ class Scan2CAD(object):
             
             train_df = self.data_frame.iloc[single_indices]
             rest_of_data_frame = self.data_frame.drop(index = single_indices)
-            train_frac = 0.8 - (len(self.data_frame) - len(rest_of_data_frame))/ len(self.data_frame)
+            train_frac = 0.6 - (len(self.data_frame) - len(rest_of_data_frame))/ len(self.data_frame)
+            num_train_samples = math.floor(train_frac * len(rest_of_data_frame))
+            print(num_train_samples)
             assert 3==2
         
         #gets test set
