@@ -51,7 +51,7 @@ class Scan2CAD(object):
         assert split in ['train' ,'test']
 
         self.data_frame = data_frame
-        print(self.data_frame)
+        print(self.data_frame.columns)
         self.transform = transform
         self.device = device
         self.names = []
