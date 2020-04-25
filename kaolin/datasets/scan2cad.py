@@ -67,7 +67,6 @@ class Scan2CAD(object):
             single_ct_labels = s[s['Count'] == 1]
             single_ct_labels = single_ct_labels.index
             single_ct_labels = single_ct_labels.to_frame(name='Filepath')
-            print(single_ct_labels)
             cond = self.data_frame['Filepath'].isin(single_ct_labels['Filepath'])
             self.data_frame = self.data_frame.drop(self.data_frame[cond].index, inplace = True)
             print(self.data_frame)
