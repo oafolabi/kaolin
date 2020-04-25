@@ -51,7 +51,6 @@ class Scan2CAD(object):
         split = split.lower()
         assert split in ['train' ,'test']
         self.data_frame = data_frame
-        print(self.data_frame.columns)
         self.transform = transform
         self.device = device
         self.names = []
@@ -65,9 +64,8 @@ class Scan2CAD(object):
             s = ct_cad_ids.to_frame(name='Count')
             single_ct_labels = s[s['Count'] == 1]
             single_ct_labels = single_ct_labels.index
-            print(single_ct_labels)
-            print("---\n"*2)
-            print(self.data_frame[~self.data_frame['Filepath'].isin(single_ct_labels)])
+            rest_of_data = self.data_frame[~self.data_frame['Filepath'].isin(single_ct_labels)]
+            print(type(rest_of_data))
             assert 3==2
         
         #gets test set
