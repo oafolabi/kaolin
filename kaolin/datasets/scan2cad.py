@@ -71,7 +71,7 @@ class Scan2CAD(object):
                     drop_indices.append(index)
 
             rest_of_data_frame = self.data_frame.drop(index = drop_indices)
-            train_frac = 0.8 - (len(rest_of_data_frame) - len(self.data_frame))/ self.data_frame
+            train_frac = 0.8 - (len(rest_of_data_frame) - len(self.data_frame))/ len(self.data_frame)
             print(train_frac)
             assert 3==2
         
