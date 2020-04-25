@@ -52,6 +52,7 @@ class Scan2CAD(object):
 
         self.data_frame = data_frame
         print(self.data_frame.columns)
+        assert 3==2
         self.transform = transform
         self.device = device
         self.names = []
