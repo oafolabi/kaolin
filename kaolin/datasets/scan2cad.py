@@ -65,14 +65,14 @@ class Scan2CAD(object):
             s = ct_cad_ids.to_frame(name='Count')
             single_ct_labels = s[s['Count'] == 1]
             single_ct_labels = single_ct_labels.index.tolist()
-            drop_indices = []
+            single_indices = []
             for index, row in self.data_frame.iterrows():
                 if(row[1] in single_ct_labels):
-                    drop_indices.append(index)
-
-            rest_of_data_frame = self.data_frame.drop(index = drop_indices)
+                    single_indices.append(index)
+            
+            train_df = self.data_frame.iloc[single_indices]
+            rest_of_data_frame = self.data_frame.drop(index = single_indices)
             train_frac = 0.8 - (len(self.data_frame) - len(rest_of_data_frame))/ len(self.data_frame)
-            print(train_frac)
             assert 3==2
         
         #gets test set
