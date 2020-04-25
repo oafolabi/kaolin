@@ -66,11 +66,10 @@ class Scan2CAD(object):
             s = ct_cad_ids.to_frame(name='Count')
             single_ct_labels = s[s['Count'] == 1]
             single_ct_labels = single_ct_labels.index
-            print(single_ct_labels.to_numpy())
             for index, row in self.data_frame.iterrows():
                 if(row[0] in single_ct_labels):
-                    print("help")
-                break
+                    self.data_frame.drop(index = index)
+            print(len(self.data_frame))
             assert 3==2
         
         #gets test set
