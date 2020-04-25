@@ -61,9 +61,8 @@ class Scan2CAD(object):
         
         if(split == 'train' or split == 'validation'):
             single_ct_cad_ids = self.cad_ids.value_counts()
-            print("Single ct")
+            single_ct_cad_ids.to_frame(name='Count')
             print(single_ct_cad_ids)
-            print(single_ct_cad_ids.head())
             assert 3==2
         
         #gets test set
