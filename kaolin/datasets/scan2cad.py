@@ -47,7 +47,8 @@ class Scan2CAD(object):
                  transform: Optional[Callable] = None,
                  device: Optional[Union[torch.device, str]] = 'cpu'):
 
-        assert split.lower() in ['train', 'test']
+        split = split.lower()
+        assert split in ['train','validation' ,'test']
 
         self.data_frame = data_frame
         self.transform = transform
@@ -57,25 +58,15 @@ class Scan2CAD(object):
         self.cad_ids = data_frame.iloc[:,1]
         self.unique_labels = self.cad_ids.unique()
         self.label_map = {self.unique_labels[i] : i for i in range(len(self.unique_labels))}
-        # for path in self.filepaths:
-        #     if(not os.path.exists(path)):
-        #         raise ValueError('OFF file not found at "{0}".'.format(basedir))
-
-
-        # if not os.path.exists(basedir):
-        #     raise ValueError('ModelNet was not found at "{0}".'.format(basedir))
-
-        # available_categories = [p for p in os.listdir(basedir) if os.path.isdir(os.path.join(basedir, p))]
-
-        # for cat_idx, category in enumerate(categories):
-        #     assert category in available_categories, 'object class {0} not in list of available classes: {1}'.format(
-        #         category, available_categories)
-
-        #     cat_paths = glob(os.path.join(basedir, category, split.lower(), '*.off'))
-
-        #     self.cat_idxs += [cat_idx] * len(cat_paths)
-        #     self.names += [os.path.splitext(os.path.basename(cp))[0] for cp in cat_paths]
-        #     self.filepaths += cat_paths
+        
+        if(split == 'train' or split == 'validation'):
+            single_ct_cad_ids = self.cad_ids.value_counts()
+            print(single_ct_cad_ids)
+            print(single_ct_cad_ids[s == 1])
+        
+        #gets test set
+        else:
+            print("help")
 
     def __len__(self):
         return len(self.cad_ids)
