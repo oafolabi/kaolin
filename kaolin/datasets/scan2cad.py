@@ -65,8 +65,8 @@ class Scan2CAD(object):
             s = ct_cad_ids.to_frame(name='Count')
             single_ct_labels = s[s['Count'] == 1]
             single_ct_labels = single_ct_labels.index
-            single_ct_labels = single_ct_labels.to_frame(name='ID')
-            print(self.data_frame[~self.data_frame['ID'].isin(single_ct_labels['ID'])])
+            single_ct_labels = single_ct_labels.to_frame(name='Filepath')
+            print(self.data_frame[~self.data_frame['Filepath'].isin(single_ct_labels['Filepath'])])
             assert 3==2
         
         #gets test set
