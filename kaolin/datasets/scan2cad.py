@@ -63,7 +63,7 @@ class Scan2CAD(object):
             single_ct_cad_ids = self.cad_ids.value_counts()
             print(single_ct_cad_ids)
             print(single_ct_cad_ids.head())
-            print(single_ct_cad_ids[single_ct_cad_ids[0] == 1])
+            print(single_ct_cad_ids.loc[single_ct_cad_ids[0] == 1])
             assert 3==2
         
         #gets test set
