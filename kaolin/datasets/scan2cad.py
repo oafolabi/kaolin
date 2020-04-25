@@ -62,7 +62,8 @@ class Scan2CAD(object):
         if(split == 'train'):
             ct_cad_ids = self.cad_ids.value_counts()
             s = ct_cad_ids.to_frame(name='Count')
-            single_ct_labels = s[s['Count'] == 1].iloc[:,0]
+            single_ct_labels = s[s['Count'] == 1]
+            print(type(single_ct_labels))
             print(single_ct_labels)
             assert 3==2
         
