@@ -17,6 +17,7 @@ from typing import Callable, Iterable, Optional, Union, List
 import torch
 import os
 from glob import glob
+import numpy as np
 from tqdm import tqdm
 import pandas as pd
 
@@ -65,7 +66,7 @@ class Scan2CAD(object):
             single_ct_labels = s[s['Count'] == 1]
             single_ct_labels = single_ct_labels.index
             rest_of_data = self.data_frame[~self.data_frame['Filepath'].isin(single_ct_labels)]
-            print(rest_of_data)
+            print(np.where((rest_of_data['Filepath'] == single_ct_labels), rest_of_data['Filepath'],np.nan))
             assert 3==2
         
         #gets test set
