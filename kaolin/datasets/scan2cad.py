@@ -58,6 +58,8 @@ class Scan2CAD(object):
         self.filepaths = self.data_frame['Filepath']
         self.cad_ids = self.data_frame['ID']
         self.unique_labels = self.cad_ids.unique()
+        print("Num classes ")
+        print(self.cad_ids.nunique())
         self.label_map = {self.unique_labels[i] : i for i in range(len(self.unique_labels))}
         
         if(split == 'train'):
@@ -66,7 +68,9 @@ class Scan2CAD(object):
             single_ct_labels = s[s['Count'] == 1]
             single_ct_labels = single_ct_labels.index
             single_ct_labels = single_ct_labels.to_frame(name='Filepath')
-            print(self.data_frame[~self.data_frame['Filepath'].isin(single_ct_labels['Filepath'])])
+            cond = self.data_frame['Filepath'].isin(single_ct_labels['Filepath'])
+            self.data_frame.drop(self.data_frame[cond].index, inplace = True)
+            print(self.data_frame)
             assert 3==2
         
         #gets test set
