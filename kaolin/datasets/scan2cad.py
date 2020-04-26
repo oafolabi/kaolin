@@ -104,8 +104,8 @@ class Scan2CAD(object):
         self.validation_cad_ids = self.validation_data_frame['ID']
         
         self.test_data_frame = rest_of_data_frame.iloc[test_indices]
-        print(self.test_data_frame)
         self.test_filepaths =  self.test_data_frame['Filepath']
+        print(self.test_filepaths)
         self.test_cad_ids = self.test_data_frame['ID']
 
         train_indices_lst = self.train_data_frame.index.tolist()
