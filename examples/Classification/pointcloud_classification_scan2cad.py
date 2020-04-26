@@ -105,7 +105,7 @@ model.eval()
 
 with torch.no_grad():
     for idx, test_batch in enumerate(tqdm(test_loader)):
-        pred = model(test_batch)
+        pred = model(test_batch[0])
         pred_labels = torch.max(pred,axis=1)[1]
         print(pred)
         assert 3==2
