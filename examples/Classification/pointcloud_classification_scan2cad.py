@@ -5,9 +5,11 @@ import torch
 from torch.utils.data import DataLoader
 
 import sys
+import time
 sys.path.append("..")
 from kaolin.datasets import ModelNet, Scan2CAD
 from kaolin.models.PointNet import PointNetClassifier
+from torch.utils.tensorboard import SummaryWriter
 import kaolin.transforms as tfs
 from utils import visualize_batch
 import pandas as pd
@@ -48,6 +50,8 @@ model = PointNetClassifier(num_classes=num_cad_classes).to(args.device)
 optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 criterion = torch.nn.CrossEntropyLoss()
 
+writer = SummaryWriter('runs/run0')
+
 for e in range(args.epochs):
 
     print('###################')
@@ -72,9 +76,13 @@ for e in range(args.epochs):
         pred_label = torch.argmax(pred, dim=1)
         train_accuracy += torch.mean((pred_label == batch[1].view(-1)).float()).detach().cpu().item()
         num_batches += 1
-
-    print('Train loss:', train_loss / num_batches)
-    print('Train accuracy:', 100 * train_accuracy / num_batches)
+    
+    train_loss_e = train_loss / num_batches
+    train_acc = train_accuracy / num_batches
+    print('Train loss:', train_loss_e)
+    print('Train accuracy:', 100 * train_acc)
+    writer.add_scalar('Training Loss', train_loss_e, e)
+    writer.add_scalar('Training Accuracy', train_acc, e)
 
     val_loss = 0.
     val_accuracy = 0.
@@ -83,6 +91,7 @@ for e in range(args.epochs):
     model.eval()
 
     with torch.no_grad():
+        print("\n Validation Testing \n")
         for idx, batch in enumerate(tqdm(val_loader)):
             pred = model(batch[0])
             loss = criterion(pred, batch[1].view(-1))
@@ -93,20 +102,33 @@ for e in range(args.epochs):
             val_accuracy += torch.mean((pred_label == batch[1].view(-1)).float()).cpu().item()
             num_batches += 1
 
-    print('Val loss:', val_loss / num_batches)
-    print('Val accuracy:', val_accuracy / num_batches)
+    val_loss_e = val_loss / num_batches
+    val_acc = val_accuracy / num_batches
+    print('Val loss:', val_loss_e)
+    print('Val accuracy:', 100 * val_acc)
+    writer.add_scalar('Validation Loss', val_loss_e, e)
+    writer.add_scalar('Validation Accuracy', val_acc, e)
 
 # test_loader = DataLoader(ModelNet(args.modelnet_root, categories=args.categories,
 #                                   split='test', transform=transform, device=args.device),
 #                          shuffle=True, batch_size=15)
 
-preds = []
+
 model.eval()
 
+test_acc = 0
 with torch.no_grad():
+    num_batches = 0
     for idx, test_batch in enumerate(tqdm(test_loader)):
         pred = model(test_batch[0])
         pred_labels = torch.max(pred,axis=1)[1]
+
+        test_acc += torch.mean((pred_labels == batch[1].view(-1)).float().cpu().item())
+        num_batches += 1
+    test_acc = test_acc / num_batches
+    
+    writer.add_scalar('Final Test Accuracy', train_loss_e, 0)
+
 
 
 # test_batch, labels = next(iter(test_loader))
