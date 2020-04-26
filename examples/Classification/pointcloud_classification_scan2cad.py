@@ -135,6 +135,7 @@ for e in range(args.epochs):
 model.eval()
 
 test_acc = 0.
+print("Testing")
 with torch.no_grad():
     num_batches = 0
     for idx, test_batch in enumerate(tqdm(test_loader)):
