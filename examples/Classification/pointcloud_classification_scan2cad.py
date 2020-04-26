@@ -62,7 +62,7 @@ else:
     val_acc_lst = []
     test_acc_lst = []
 
-for e in range(args.epochs):
+for e in range(0*args.epochs):
 
     print('###################')
     print('Epoch:', e)
@@ -140,8 +140,10 @@ with torch.no_grad():
     for idx, test_batch in enumerate(tqdm(test_loader)):
         pred = model(test_batch[0])
         pred_labels = torch.argmax(pred, dim=1)
-        print(pred_labels)
-        test_acc += torch.mean((pred_labels == batch[1].view(-1)).float().cpu().item())
+        #assuming batch-sz 1
+        if(pred_labels[0] == batch[1].view(-1)[0]):
+            test_acc += 1
+
         num_batches += 1
     test_acc = test_acc / num_batches
     
