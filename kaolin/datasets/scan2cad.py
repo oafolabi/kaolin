@@ -26,6 +26,8 @@ import pandas as pd
 from kaolin.rep.TriangleMesh import TriangleMesh
 from kaolin.transforms import transforms as tfs
 
+np.random.seed(42)
+
 #Based off of modelnet.py and its ModelNet dataset class
 class Scan2CAD(object):
     """ Dataset class for the Scan2CAD dataset.
@@ -52,54 +54,86 @@ class Scan2CAD(object):
                  device: Optional[Union[torch.device, str]] = 'cpu'):
 
         split = split.lower()
-        assert split in ['train' ,'test']
-        self.data_frame = data_frame
+        assert split in ['train' , 'validation','test']
+
+        self.split = split
         self.transform = transform
         self.device = device
-        self.names = []
-        self.filepaths = self.data_frame['Filepath']
-        self.cad_ids = self.data_frame['ID']
-        self.unique_labels = self.cad_ids.unique()
+
+        filepaths = data_frame['Filepath']
+        cad_ids = data_frame['ID']
+        self.num_classes = cad_ids.nunique()
+        self.unique_labels = cad_ids.unique()
         self.label_map = {self.unique_labels[i] : i for i in range(len(self.unique_labels))}
         
-        if(split == 'train'):
-            ct_cad_ids = self.cad_ids.value_counts()
-            s = ct_cad_ids.to_frame(name='Count')
-            single_ct_labels = s[s['Count'] == 1]
-            single_ct_labels = single_ct_labels.index.tolist()
-            single_indices = []
-            for index, row in self.data_frame.iterrows():
-                if(row[1] in single_ct_labels):
-                    single_indices.append(index)
-            
-            rest_of_data_frame = self.data_frame.drop(index = single_indices)
-            train_frac = 0.6 - (len(self.data_frame) - len(rest_of_data_frame))/ len(self.data_frame)
-            num_train_samples = math.floor(train_frac * len(rest_of_data_frame))
-            train_sample_indices = np.random.choice(range(0,len(rest_of_data_frame)),
-                                                    num_train_samples, 
-                                                    replace = False )
-            train_sample_indices = train_sample_indices.tolist()
-            assert len(train_sample_indices) == len(set(train_sample_indices))
-            train_indices = train_sample_indices + single_indices
-            train_df = self.data_frame.iloc[train_indices]
-            assert len(train_df) == num_train_samples + (len(self.data_frame) - len(rest_of_data_frame))
-            print("Done!")
+        #Does the data split
+        ct_cad_ids = cad_ids.value_counts()
+        s = ct_cad_ids.to_frame(name='Count')
+        single_ct_labels = s[s['Count'] == 1]
+        single_ct_labels = single_ct_labels.index.tolist()
+        single_indices = []
+        for index, row in data_frame.iterrows():
+            if(row[1] in single_ct_labels):
+                single_indices.append(index)
         
-        #gets test set
-        else:
-            print("help")
+        rest_of_data_frame = data_frame.drop(index = single_indices)
+        train_frac = 0.6 - (len(data_frame) - len(rest_of_data_frame))/ len(data_frame)
+        num_train_samples = math.floor(train_frac * len(rest_of_data_frame))
+        num_val_samples = math.floor(0.2*len(rest_of_data_frame))
+        num_test_sample = len(rest_of_data_frame) - (num_test_sample + num_val_samples)
+        shuffled_indices = np.random.choice(range(0,len(rest_of_data_frame)),
+                                                num_train_samples, 
+                                                replace = False ).tolist()
+        train_sample_indices = shuffled_indices[0:num_train_samples]
+        train_indices = train_sample_indices + single_indices
+        val_indices = shuffled_indices[num_train_samples : num_train_samples + num_val_samples]
+        test_indices = shuffled_indices[len(rest_of_data_frame)-num_test_sample:]
+        print(len(train_indices) + len(val_indices) + len(test_indices))
+        print(len(data_frame))
+        #creates train and validation set
+        self.train_data_frame = data_frame.iloc[train_indices]
+        self.train_filepaths =  self.train_data_frame['Filepath']
+        self.train_cad_ids = self.train_data_frame['ID']
+
+        self.validation_data_frame = data_frame.iloc[val_indices]
+        self.validation_filepaths =  self.validation_data_frame['Filepath']
+        self.validation_cad_ids = self.validation_data_frame['ID']
+        
+        self.test_data_frame = data_frame.iloc[test_indices]
+        self.test_filepaths =  self.test_data_frame['Filepath']
+        self.test_cad_ids = self.test_data_frame['ID']
+
+        #Saves dataframe just in case :)
+        self.data_frame = data_frame
 
     def __len__(self):
-        return len(self.cad_ids)
+        if(self.split == 'train'):
+            return len(self.train_cad_ids)
+        elif(self.split == 'validation'):
+            return len(self.validation_cad_ids)
+        else:
+            return len(self.test_cad_ids)
     
     def num_classes(self):
-        return self.cad_ids.nunique()
+        #Returns numclasses in ENTIRE DATASET
+        return self.num_classes
 
     def __getitem__(self, index):
         """Returns the item at index idx. """
-        data = TriangleMesh.from_off(self.filepaths[index])
-        cad_id = self.cad_ids[index]
-        label = self.label_map[cad_id]
+        if(self.split == 'train'):
+            data = TriangleMesh.from_off(self.train_filepaths[index])
+            cad_id = self.train_cad_ids[index]
+            label = self.label_map[cad_id]
+        
+        elif(self.split == 'validation'):
+            data = TriangleMesh.from_off(self.validation_filepaths[index])
+            cad_id = self.validation_cad_ids[index]
+            label = self.label_map[cad_id]
+        
+        elif(self.split == 'test'):
+            data = TriangleMesh.from_off(self.test_filepaths[index])
+            cad_id = self.test_cad_ids[index]
+            label = self.label_map[cad_id]
 
         label = torch.tensor(label, dtype=torch.long, device=self.device)
         data.to(self.device)
@@ -108,5 +142,6 @@ class Scan2CAD(object):
             data = self.transform(data)
 
         return data, label
+    
 
 
