@@ -68,35 +68,35 @@ for e in range(args.epochs):
     print('Epoch:', e)
     print('###################')
 
-    # train_loss = 0.
-    # train_accuracy = 0.
-    # num_batches = 0
+    train_loss = 0.
+    train_accuracy = 0.
+    num_batches = 0
 
-    # model.train()
+    model.train()
 
-    # optimizer.zero_grad()
-    # for idx, batch in enumerate(tqdm(train_loader)):
-    #     pred = model(batch[0])
-    #     loss = criterion(pred, batch[1].view(-1))
-    #     train_loss += loss.item()
-    #     loss.backward()
-    #     optimizer.step()
+    optimizer.zero_grad()
+    for idx, batch in enumerate(tqdm(train_loader)):
+        pred = model(batch[0])
+        loss = criterion(pred, batch[1].view(-1))
+        train_loss += loss.item()
+        loss.backward()
+        optimizer.step()
 
-    #     # Compute accuracy
-    #     pred_label = torch.argmax(pred, dim=1)
-    #     train_accuracy += torch.mean((pred_label == batch[1].view(-1)).float()).detach().cpu().item()
-    #     num_batches += 1
+        # Compute accuracy
+        pred_label = torch.argmax(pred, dim=1)
+        train_accuracy += torch.mean((pred_label == batch[1].view(-1)).float()).detach().cpu().item()
+        num_batches += 1
     
-    # train_loss_e = train_loss / num_batches
-    # train_acc = train_accuracy / num_batches
-    # print('Train loss:', train_loss_e)
-    # print('Train accuracy:', 100 * train_acc)
-    # if(args.tensorboard):
-    #     writer.add_scalar('Training Loss', train_loss_e, e)
-    #     writer.add_scalar('Training Accuracy', train_acc, e)
-    # else:
-    #     train_loss_lst.append(train_loss_e)
-    #     train_acc_lst.append(train_acc)
+    train_loss_e = train_loss / num_batches
+    train_acc = train_accuracy / num_batches
+    print('Train loss:', train_loss_e)
+    print('Train accuracy:', 100 * train_acc)
+    if(args.tensorboard):
+        writer.add_scalar('Training Loss', train_loss_e, e)
+        writer.add_scalar('Training Accuracy', train_acc, e)
+    else:
+        train_loss_lst.append(train_loss_e)
+        train_acc_lst.append(train_acc)
 
     val_loss = 0.
     val_accuracy = 0.
