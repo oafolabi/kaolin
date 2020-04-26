@@ -4,6 +4,7 @@ from tqdm import tqdm
 import torch
 from torch.utils.data import DataLoader
 
+import matplotlib.pyplot as plt
 import sys
 import time
 sys.path.append("..")
@@ -16,6 +17,7 @@ import pandas as pd
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--run_number', type = int, default = 0, help='Run Number of log')
+parser.add_argument('--tensorboard', type = bool, default = 0, help='T/F To use Tensorboard or not')
 #parser.add_argument('--modelnet-root', type=str, help='Root directory of the ModelNet dataset.')
 #parser.add_argument('--categories', type=str, nargs='+', default=['chair', 'sofa'], help='list of object classes to use.')
 parser.add_argument('--num-points', type=int, default=1024, help='Number of points to sample from meshes.')
@@ -51,7 +53,14 @@ model = PointNetClassifier(num_classes=num_cad_classes).to(args.device)
 optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 criterion = torch.nn.CrossEntropyLoss()
 
-writer = SummaryWriter('runs/' + str(args.run_number))
+if(args.tensorboard):
+    writer = SummaryWriter('runs/' + str(args.run_number))
+else:
+    train_acc_lst = []
+    train_loss_lst = []
+    val_loss_lst = []
+    val_acc_lst = []
+    test_acc_lst = []
 
 for e in range(args.epochs):
 
@@ -82,8 +91,12 @@ for e in range(args.epochs):
     train_acc = train_accuracy / num_batches
     print('Train loss:', train_loss_e)
     print('Train accuracy:', 100 * train_acc)
-    writer.add_scalar('Training Loss', train_loss_e, e)
-    writer.add_scalar('Training Accuracy', train_acc, e)
+    if(args.tensorboard):
+        writer.add_scalar('Training Loss', train_loss_e, e)
+        writer.add_scalar('Training Accuracy', train_acc, e)
+    else:
+        train_loss_lst.append(train_loss_e)
+        train_acc_lst.append(train_acc)
 
     val_loss = 0.
     val_accuracy = 0.
@@ -107,8 +120,12 @@ for e in range(args.epochs):
     val_acc = val_accuracy / num_batches
     print('Val loss:', val_loss_e)
     print('Val accuracy:', 100 * val_acc)
-    writer.add_scalar('Validation Loss', val_loss_e, e)
-    writer.add_scalar('Validation Accuracy', val_acc, e)
+    if(args.tensorboard):
+        writer.add_scalar('Validation Loss', val_loss_e, e)
+        writer.add_scalar('Validation Accuracy', val_acc, e)
+    else:
+        val_loss_lst.append(val_loss_e)
+        val_acc_lst.append(val_acc)
 
 # test_loader = DataLoader(ModelNet(args.modelnet_root, categories=args.categories,
 #                                   split='test', transform=transform, device=args.device),
@@ -128,7 +145,31 @@ with torch.no_grad():
         num_batches += 1
     test_acc = test_acc / num_batches
     
-    writer.add_scalar('Final Test Accuracy', train_loss_e, 0)
+    if(args.tensorboard):
+        writer.add_scalar('Final Test Accuracy', test_acc, 0)
+    else:
+        test_acc_lst.append(test_acc)
+    
+if(not args.tensorboard):
+    plt.figure()
+    plt.plot(np.array(train_acc_lst), label='train_acc', color = blue)
+    plt.plot(np.array(val_acc_lst),label='val_acc', color = yellow)
+    plt.plot(np.array(test_acc_lst), label='test_acc', color = red)
+    plt.title("Train Acc vs Validation Acc")
+    plt.legend()
+    plt.xlabel("Epoch Number")
+    plt.ylabel("Accuracy Percent")
+    plt.savefig('run_' + str(args.run_number) + "_accuracies_plot.png")
+
+    plt.figure()
+    plt.plot(np.array(train_loss_lst), label='train_loss', color = blue)
+    plt.plot(np.array(val_loss_lst),label='val_loss', color = yellow)
+    plt.title("Train Loss vs Validation Loss")
+    plt.legend()
+    plt.xlabel("Epoch Number")
+    plt.ylabel("Loss")
+    plt.savefig('run_' + str(args.run_number) + "_loss_plot.png")
+
 
 
 
