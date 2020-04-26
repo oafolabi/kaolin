@@ -142,7 +142,7 @@ with torch.no_grad():
         pred = model(test_batch[0])
         pred_labels = torch.argmax(pred, dim=1)
         #assuming test-batch 1
-        if(pred_labels[0] == test_batch[1][0]):
+        if(pred_labels[0].int() == test_batch[1][0].int()):
             test_acc += 1
         #test_acc += torch.mean((pred_labels == test_batch[1].view(-1)).float().cpu().item())
         num_batches += 1
