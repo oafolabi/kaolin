@@ -108,7 +108,6 @@ class Scan2CAD(object):
         self.test_data_frame = rest_of_data_frame.iloc[test_indices]
         self.test_data_frame.reset_index(inplace=True)
         self.test_filepaths =  self.test_data_frame['Filepath']
-        print(self.test_filepaths)
         self.test_cad_ids = self.test_data_frame['ID']
 
         train_indices_lst = self.train_data_frame.index.tolist()
