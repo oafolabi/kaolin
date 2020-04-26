@@ -12,10 +12,10 @@
 #SBATCH --nodes=1
 #
 # Request cores (24, for example)
-#SBATCH --ntasks-per-node=24
+#SBATCH --ntasks-per-node=2
 #
 # Wall clock limit:
-#SBATCH --time=20:00:00
+#SBATCH --time=15:00:00
 #
 ## Command(s) to run (example):
 module load python
