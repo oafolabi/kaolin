@@ -87,27 +87,28 @@ class Scan2CAD(object):
                                                 len(rest_of_data_frame), 
                                                 replace = False ).tolist()
 
+        
         train_sample_indices = shuffled_indices[0:num_train_samples]
-
-        train_indices = train_sample_indices + single_indices
         val_indices = shuffled_indices[num_train_samples : num_train_samples + num_val_samples]
         test_indices = shuffled_indices[len(rest_of_data_frame)-num_test_samples:]
-        print(len(train_indices) + len(val_indices) + len(test_indices) == len(data_frame))
-        print(set(train_indices + val_indices + test_indices) == set(list(range(0,len(data_frame)))))
 
         #creates train and validation set
-        self.train_data_frame = data_frame.iloc[train_indices]
+        self.train_data_frame = pd.concat([data_frame.iloc[single_indices], rest_of_data_frame[train_sample_indices]])
         self.train_filepaths =  self.train_data_frame['Filepath']
         self.train_cad_ids = self.train_data_frame['ID']
 
-        self.validation_data_frame = data_frame.iloc[val_indices]
+        self.validation_data_frame = rest_of_data_frame.iloc[val_indices]
         self.validation_filepaths =  self.validation_data_frame['Filepath']
         self.validation_cad_ids = self.validation_data_frame['ID']
         
-        self.test_data_frame = data_frame.iloc[test_indices]
+        self.test_data_frame = rest_of_data_frame.iloc[test_indices]
         self.test_filepaths =  self.test_data_frame['Filepath']
         self.test_cad_ids = self.test_data_frame['ID']
 
+        train_indices_lst = self.train_data_frame.index.tolist()
+        val_indices_lst = self.validation_data_frame.index.tolist()
+        test_indices_lst = self.test_data_frame.index.tolist()
+        print(set(train_indices_lst + val_indices_lst + test_indices_lst) == set(data_frame.index.tolist()))
         #Saves dataframe just in case :)
         self.data_frame = data_frame
 
