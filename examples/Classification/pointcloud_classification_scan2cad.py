@@ -48,53 +48,53 @@ model = PointNetClassifier(num_classes=num_cad_classes).to(args.device)
 optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 criterion = torch.nn.CrossEntropyLoss()
 
-# for e in range(args.epochs):
+for e in range(args.epochs):
 
-#     print('###################')
-#     print('Epoch:', e)
-#     print('###################')
+    print('###################')
+    print('Epoch:', e)
+    print('###################')
 
-#     train_loss = 0.
-#     train_accuracy = 0.
-#     num_batches = 0
+    train_loss = 0.
+    train_accuracy = 0.
+    num_batches = 0
 
-#     model.train()
+    model.train()
 
-#     optimizer.zero_grad()
-#     for idx, batch in enumerate(tqdm(train_loader)):
-#         pred = model(batch[0])
-#         loss = criterion(pred, batch[1].view(-1))
-#         train_loss += loss.item()
-#         loss.backward()
-#         optimizer.step()
+    optimizer.zero_grad()
+    for idx, batch in enumerate(tqdm(train_loader)):
+        pred = model(batch[0])
+        loss = criterion(pred, batch[1].view(-1))
+        train_loss += loss.item()
+        loss.backward()
+        optimizer.step()
 
-#         # Compute accuracy
-#         pred_label = torch.argmax(pred, dim=1)
-#         train_accuracy += torch.mean((pred_label == batch[1].view(-1)).float()).detach().cpu().item()
-#         num_batches += 1
+        # Compute accuracy
+        pred_label = torch.argmax(pred, dim=1)
+        train_accuracy += torch.mean((pred_label == batch[1].view(-1)).float()).detach().cpu().item()
+        num_batches += 1
 
-#     print('Train loss:', train_loss / num_batches)
-#     print('Train accuracy:', 100 * train_accuracy / num_batches)
+    print('Train loss:', train_loss / num_batches)
+    print('Train accuracy:', 100 * train_accuracy / num_batches)
 
-#     val_loss = 0.
-#     val_accuracy = 0.
-#     num_batches = 0
+    val_loss = 0.
+    val_accuracy = 0.
+    num_batches = 0
 
-#     model.eval()
+    model.eval()
 
-#     with torch.no_grad():
-#         for idx, batch in enumerate(tqdm(val_loader)):
-#             pred = model(batch[0])
-#             loss = criterion(pred, batch[1].view(-1))
-#             val_loss += loss.item()
+    with torch.no_grad():
+        for idx, batch in enumerate(tqdm(val_loader)):
+            pred = model(batch[0])
+            loss = criterion(pred, batch[1].view(-1))
+            val_loss += loss.item()
 
-#             # Compute accuracy
-#             pred_label = torch.argmax(pred, dim=1)
-#             val_accuracy += torch.mean((pred_label == batch[1].view(-1)).float()).cpu().item()
-#             num_batches += 1
+            # Compute accuracy
+            pred_label = torch.argmax(pred, dim=1)
+            val_accuracy += torch.mean((pred_label == batch[1].view(-1)).float()).cpu().item()
+            num_batches += 1
 
-#     print('Val loss:', val_loss / num_batches)
-#     print('Val accuracy:', val_accuracy / num_batches)
+    print('Val loss:', val_loss / num_batches)
+    print('Val accuracy:', val_accuracy / num_batches)
 
 # test_loader = DataLoader(ModelNet(args.modelnet_root, categories=args.categories,
 #                                   split='test', transform=transform, device=args.device),
@@ -107,8 +107,7 @@ with torch.no_grad():
     for idx, test_batch in enumerate(tqdm(test_loader)):
         pred = model(test_batch[0])
         pred_labels = torch.max(pred,axis=1)[1]
-        print(pred_labels)
-        assert 3==2
+
 
 # test_batch, labels = next(iter(test_loader))
 # preds = model(test_batch)
