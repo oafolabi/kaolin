@@ -134,12 +134,12 @@ for e in range(args.epochs):
 
 model.eval()
 
-test_acc = 0
+test_acc = 0.
 with torch.no_grad():
     num_batches = 0
     for idx, test_batch in enumerate(tqdm(test_loader)):
         pred = model(test_batch[0])
-        pred_labels = torch.max(pred,axis=1)[1]
+        pred_labels = torch.argmax(pred, dim=1)
 
         test_acc += torch.mean((pred_labels == batch[1].view(-1)).float().cpu().item())
         num_batches += 1
@@ -149,8 +149,7 @@ with torch.no_grad():
         writer.add_scalar('Final Test Accuracy', test_acc, 0)
     else:
         test_acc_lst.append(test_acc)
-
-print('Train accuracy:', 100 * test_acc)
+print('Test accuracy:', 100 * test_acc)
     
 if(not args.tensorboard):
     plt.figure()
