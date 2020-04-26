@@ -26,7 +26,6 @@ import pandas as pd
 from kaolin.rep.TriangleMesh import TriangleMesh
 from kaolin.transforms import transforms as tfs
 
-np.random.seed(42)
 
 #Based off of modelnet.py and its ModelNet dataset class
 class Scan2CAD(object):
@@ -53,6 +52,9 @@ class Scan2CAD(object):
                  transform: Optional[Callable] = None,
                  device: Optional[Union[torch.device, str]] = 'cpu'):
 
+        #To ensure same split every time
+        np.random.seed(42)
+
         split = split.lower()
         assert split in ['train' , 'validation','test']
 
@@ -62,10 +64,10 @@ class Scan2CAD(object):
 
         filepaths = data_frame['Filepath']
         cad_ids = data_frame['ID']
-        self.n_classes = cad_ids.nunique()
+        self.num_classes = cad_ids.nunique()
         self.unique_labels = cad_ids.unique()
         self.label_map = {self.unique_labels[i] : i for i in range(len(self.unique_labels))}
-        
+
         #Does the data split
         ct_cad_ids = cad_ids.value_counts()
         s = ct_cad_ids.to_frame(name='Count')
@@ -108,7 +110,8 @@ class Scan2CAD(object):
         train_indices_lst = self.train_data_frame.index.tolist()
         val_indices_lst = self.validation_data_frame.index.tolist()
         test_indices_lst = self.test_data_frame.index.tolist()
-        print(set(train_indices_lst + val_indices_lst + test_indices_lst) == set(data_frame.index.tolist()))
+
+
         #Saves dataframe just in case :)
         self.data_frame = data_frame
 
@@ -120,9 +123,14 @@ class Scan2CAD(object):
         else:
             return len(self.test_cad_ids)
     
-    def num_classes(self):
+    def get_num_classes(self):
         #Returns numclasses in ENTIRE DATASET
-        return self.n_classes
+        return self.num_classes
+    
+    def set_split(self,split):
+        split = split.lower()
+        assert split in ['train' , 'validation','test']
+        self.split = split
 
     def __getitem__(self, index):
         """Returns the item at index idx. """
