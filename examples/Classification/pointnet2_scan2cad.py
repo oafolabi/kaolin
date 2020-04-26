@@ -149,6 +149,8 @@ with torch.no_grad():
         writer.add_scalar('Final Test Accuracy', test_acc, 0)
     else:
         test_acc_lst.append(test_acc)
+
+print('Train accuracy:', 100 * test_acc)
     
 if(not args.tensorboard):
     plt.figure()
