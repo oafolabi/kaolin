@@ -80,7 +80,7 @@ class Scan2CAD(object):
         train_frac = 0.6 - (len(data_frame) - len(rest_of_data_frame))/ len(data_frame)
         num_train_samples = math.floor(train_frac * len(rest_of_data_frame))
         num_val_samples = math.floor(0.2*len(rest_of_data_frame))
-        num_test_sample = len(rest_of_data_frame) - (num_test_sample + num_val_samples)
+        num_test_sample = len(rest_of_data_frame) - (num_train_samples + num_val_samples)
         shuffled_indices = np.random.choice(range(0,len(rest_of_data_frame)),
                                                 num_train_samples, 
                                                 replace = False ).tolist()
@@ -90,6 +90,9 @@ class Scan2CAD(object):
         test_indices = shuffled_indices[len(rest_of_data_frame)-num_test_sample:]
         print(len(train_indices) + len(val_indices) + len(test_indices))
         print(len(data_frame))
+        our_indices = train_indices + val_indices + test_indices
+        total_indices = list(range(len(data_frame)))
+        print(len(set(our_indices + total_indices)) == len(data_frame))
         #creates train and validation set
         self.train_data_frame = data_frame.iloc[train_indices]
         self.train_filepaths =  self.train_data_frame['Filepath']
