@@ -15,6 +15,7 @@ from utils import visualize_batch
 import pandas as pd
 
 parser = argparse.ArgumentParser()
+parser.add_argument('--run_number', type = int, help='Run Number of log')
 #parser.add_argument('--modelnet-root', type=str, help='Root directory of the ModelNet dataset.')
 #parser.add_argument('--categories', type=str, nargs='+', default=['chair', 'sofa'], help='list of object classes to use.')
 parser.add_argument('--num-points', type=int, default=1024, help='Number of points to sample from meshes.')
@@ -50,7 +51,7 @@ model = PointNetClassifier(num_classes=num_cad_classes).to(args.device)
 optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 criterion = torch.nn.CrossEntropyLoss()
 
-writer = SummaryWriter('runs/run0')
+writer = SummaryWriter('runs/' + str(args.run_number))
 
 for e in range(args.epochs):
 
