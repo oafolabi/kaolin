@@ -140,8 +140,7 @@ with torch.no_grad():
     for idx, test_batch in enumerate(tqdm(test_loader)):
         pred = model(test_batch[0])
         pred_labels = torch.argmax(pred, dim=1)
-        print(pred_labels)
-        test_acc += torch.mean((pred_labels == batch[1].view(-1)).float().cpu().item())
+        test_acc += torch.mean((pred_labels == test_batch[1].view(-1)).float().cpu().item())
         num_batches += 1
     test_acc = test_acc / num_batches
     
