@@ -19,6 +19,7 @@ import math
 import os
 from glob import glob
 import numpy as np
+
 from tqdm import tqdm
 import pandas as pd
 
@@ -74,8 +75,12 @@ class Scan2CAD(object):
             rest_of_data_frame = self.data_frame.drop(index = single_indices)
             train_frac = 0.6 - (len(self.data_frame) - len(rest_of_data_frame))/ len(self.data_frame)
             num_train_samples = math.floor(train_frac * len(rest_of_data_frame))
-            train_sample_indices = np.random.random_integers(0,len(rest_of_data_frame)-1,num_train_samples)
-            train_indices = train_sample_indices.tolist() + single_indices
+            train_sample_indices = np.random.choice(range(0,len(rest_of_data_frame)),
+                                                    num_train_samples, 
+                                                    replace = False )
+            train_sample_indices = train_sample_indices.tolist()
+            assert len(train_sample_indices) == len(set(train_sample_indices))
+            train_indices = train_sample_indices + single_indices
             train_df2 = rest_of_data_frame.iloc[train_indices]
             assert len(train_df2) == num_train_samples
             print("Done!")
