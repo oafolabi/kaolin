@@ -75,10 +75,10 @@ class Scan2CAD(object):
             train_frac = 0.6 - (len(self.data_frame) - len(rest_of_data_frame))/ len(self.data_frame)
             num_train_samples = math.floor(train_frac * len(rest_of_data_frame))
             train_sample_indices = np.random.random_integers(0,len(rest_of_data_frame)-1,num_train_samples)
-            print(train_sample_indices.tolist())
             train_indices = train_sample_indices.tolist() + single_indices
-            train_df2 = rest_of_data_frame.illoc[train_indices]
-            assert 3==2
+            train_df2 = rest_of_data_frame.iloc[train_indices]
+            assert len(train_df2) == num_train_samples
+            print("Done!")
         
         #gets test set
         else:
