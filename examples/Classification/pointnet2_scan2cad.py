@@ -159,7 +159,7 @@ if(not args.tensorboard):
     plt.legend()
     plt.xlabel("Epoch Number")
     plt.ylabel("Accuracy Percent")
-    plt.savefig('run_' + str(args.run_number) + "_accuracies_plot.png")
+    plt.savefig('pointnet2_run_' + str(args.run_number) + "_accuracies_plot.png")
 
     plt.figure()
     plt.plot(np.array(train_loss_lst), label='train_loss', color = blue)
@@ -168,7 +168,7 @@ if(not args.tensorboard):
     plt.legend()
     plt.xlabel("Epoch Number")
     plt.ylabel("Loss")
-    plt.savefig('run_' + str(args.run_number) + "_loss_plot.png")
+    plt.savefig('pointnet2_run_' + str(args.run_number) + "_loss_plot.png")
 
 
 
