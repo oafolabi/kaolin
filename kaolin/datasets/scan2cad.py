@@ -71,11 +71,13 @@ class Scan2CAD(object):
                 if(row[1] in single_ct_labels):
                     single_indices.append(index)
             
-            train_df = self.data_frame.iloc[single_indices]
             rest_of_data_frame = self.data_frame.drop(index = single_indices)
             train_frac = 0.6 - (len(self.data_frame) - len(rest_of_data_frame))/ len(self.data_frame)
             num_train_samples = math.floor(train_frac * len(rest_of_data_frame))
-            print(num_train_samples)
+            train_sample_indices = np.random.random_integers(0,len(rest_of_data_frame)-1,num_train_samples)
+            print(train_sample_indices.tolist())
+            train_indices = train_sample_indices.tolist() + single_indices
+            train_df2 = rest_of_data_frame.illoc[train_indices]
             assert 3==2
         
         #gets test set
