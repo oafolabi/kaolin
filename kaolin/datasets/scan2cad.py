@@ -96,14 +96,17 @@ class Scan2CAD(object):
 
         #creates train and validation set
         self.train_data_frame = pd.concat([data_frame.iloc[single_indices], rest_of_data_frame.iloc[train_sample_indices]])
+        self.train_data_frame.reset_index(inplace=True)
         self.train_filepaths =  self.train_data_frame['Filepath']
         self.train_cad_ids = self.train_data_frame['ID']
 
         self.validation_data_frame = rest_of_data_frame.iloc[val_indices]
+        self.validation_data_frame.reset_index(inplace=True)
         self.validation_filepaths =  self.validation_data_frame['Filepath']
         self.validation_cad_ids = self.validation_data_frame['ID']
         
         self.test_data_frame = rest_of_data_frame.iloc[test_indices]
+        self.test_data_frame.reset_index(inplace=True)
         self.test_filepaths =  self.test_data_frame['Filepath']
         print(self.test_filepaths)
         self.test_cad_ids = self.test_data_frame['ID']
