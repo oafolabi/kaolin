@@ -104,6 +104,7 @@ class Scan2CAD(object):
         self.validation_cad_ids = self.validation_data_frame['ID']
         
         self.test_data_frame = rest_of_data_frame.iloc[test_indices]
+        print(self.test_data_frame)
         self.test_filepaths =  self.test_data_frame['Filepath']
         self.test_cad_ids = self.test_data_frame['ID']
 
@@ -145,7 +146,6 @@ class Scan2CAD(object):
             label = self.label_map[cad_id]
         
         elif(self.split == 'test'):
-            print(self.test_filepaths[index])
             data = TriangleMesh.from_off(self.test_filepaths[index])
             cad_id = self.test_cad_ids[index]
             label = self.label_map[cad_id]

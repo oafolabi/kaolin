@@ -104,7 +104,7 @@ preds = []
 model.eval()
 
 with torch.no_grad():
-    for idx, test_batch in enumerate(test_loader):
+    for idx, test_batch in enumerate(tqdm(test_loader)):
         pred = model(test_batch)
         pred_labels = torch.max(pred,axis=1)[1]
         print(pred)
