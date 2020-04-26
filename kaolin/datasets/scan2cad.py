@@ -91,6 +91,7 @@ class Scan2CAD(object):
 
         train_indices = train_sample_indices + single_indices
         print(len(train_indices))
+        print(len(single_indices) / len(data_frame))
         print(0.6*len(data_frame))
         val_indices = shuffled_indices[num_train_samples : num_train_samples + num_val_samples]
         test_indices = shuffled_indices[len(rest_of_data_frame)-num_test_samples:]
