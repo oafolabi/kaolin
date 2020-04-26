@@ -93,7 +93,7 @@ class Scan2CAD(object):
         test_indices = shuffled_indices[len(rest_of_data_frame)-num_test_samples:]
 
         #creates train and validation set
-        self.train_data_frame = pd.concat([data_frame.iloc[single_indices], rest_of_data_frame[train_sample_indices]])
+        self.train_data_frame = pd.concat([data_frame.iloc[single_indices], rest_of_data_frame.iloc[train_sample_indices]])
         self.train_filepaths =  self.train_data_frame['Filepath']
         self.train_cad_ids = self.train_data_frame['ID']
 
