@@ -16,8 +16,8 @@ from utils import visualize_batch
 import pandas as pd
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--run_number', type = int, default = 0, help='Run Number of log')
-parser.add_argument('--tensorboard', type = bool, default = True, help='T/F To use Tensorboard or not')
+parser.add_argument('--run_number', type = str, default = '0', help='Run Number of log')
+parser.add_argument('--tensorboard', type = int, default = 0, choice=[0,1],help='T/F To use Tensorboard or not')
 #parser.add_argument('--modelnet-root', type=str, help='Root directory of the ModelNet dataset.')
 #parser.add_argument('--categories', type=str, nargs='+', default=['chair', 'sofa'], help='list of object classes to use.')
 parser.add_argument('--num-points', type=int, default=1024, help='Number of points to sample from meshes.')
@@ -28,6 +28,11 @@ parser.add_argument('--device', type=str, default='cuda', help='Device to use.')
 
 args = parser.parse_args()
 
+if(args.tensorboard == 0):
+    args.tensorboard = False
+
+else:
+    args.tensorboard = True
 
 transform = tfs.Compose([
     tfs.TriangleMeshToPointCloud(num_samples=args.num_points),
@@ -54,7 +59,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 criterion = torch.nn.CrossEntropyLoss()
 
 if(args.tensorboard):
-    writer = SummaryWriter('runs/' + str(args.run_number))
+    writer = SummaryWriter('runs/' + args.run_number)
 else:
     train_acc_lst = []
     train_loss_lst = []
@@ -163,7 +168,7 @@ if(not args.tensorboard):
     plt.legend()
     plt.xlabel("Epoch Number")
     plt.ylabel("Accuracy Percent")
-    plt.savefig('run_' + str(args.run_number) + "_accuracies_plot.png")
+    plt.savefig('run_' + args.run_number + "_accuracies_plot.png")
 
     plt.figure()
     plt.plot(np.array(train_loss_lst), label='train_loss', color = blue)
@@ -172,7 +177,7 @@ if(not args.tensorboard):
     plt.legend()
     plt.xlabel("Epoch Number")
     plt.ylabel("Loss")
-    plt.savefig('run_' + str(args.run_number) + "_loss_plot.png")
+    plt.savefig('run_' + args.run_number + "_loss_plot.png")
 
 
 
