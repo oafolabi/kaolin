@@ -21,5 +21,4 @@
 module load python
 module load cuda/10.1
 source activate /global/scratch/akashgokul/kaolin_run
-cd kaolin/examples/Classification
 python3 pointcloud_classification_scan2cad.py --run_number 1 --tensorboard False --batch_size 64 --epochs 10
