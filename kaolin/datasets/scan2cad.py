@@ -82,6 +82,8 @@ class Scan2CAD(object):
             assert len(train_sample_indices) == len(set(train_sample_indices))
             train_indices = train_sample_indices + single_indices
             train_df = self.data_frame.iloc[train_indices]
+            print(len(train_df))
+            print(num_train_samples)
             assert len(train_df) == num_train_samples
             print("Done!")
         
