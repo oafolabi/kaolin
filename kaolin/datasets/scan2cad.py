@@ -62,7 +62,7 @@ class Scan2CAD(object):
 
         filepaths = data_frame['Filepath']
         cad_ids = data_frame['ID']
-        self.num_classes = cad_ids.nunique()
+        self.n_classes = cad_ids.nunique()
         self.unique_labels = cad_ids.unique()
         self.label_map = {self.unique_labels[i] : i for i in range(len(self.unique_labels))}
         
@@ -92,7 +92,7 @@ class Scan2CAD(object):
         print(len(data_frame))
         our_indices = train_indices + val_indices + test_indices
         total_indices = list(range(len(data_frame)))
-        print(len(set(our_indices + total_indices)) == len(data_frame))
+        print(set(our_indices) == set(total_indices))
         #creates train and validation set
         self.train_data_frame = data_frame.iloc[train_indices]
         self.train_filepaths =  self.train_data_frame['Filepath']
@@ -119,7 +119,7 @@ class Scan2CAD(object):
     
     def num_classes(self):
         #Returns numclasses in ENTIRE DATASET
-        return self.num_classes
+        return self.n_classes
 
     def __getitem__(self, index):
         """Returns the item at index idx. """
