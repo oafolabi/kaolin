@@ -85,6 +85,8 @@ class Scan2CAD(object):
         print(num_val_samples)
         num_test_samples = len(rest_of_data_frame) - (num_train_samples + num_val_samples)
         print(num_test_samples)
+        print("-------")
+        print(num_train_samples + num_val_samples + num_test_samples == len(data_frame))
         shuffled_indices = np.random.choice(range(0,len(rest_of_data_frame)),
                                                 num_train_samples, 
                                                 replace = False ).tolist()
@@ -92,8 +94,6 @@ class Scan2CAD(object):
         train_indices = train_sample_indices + single_indices
         val_indices = shuffled_indices[num_train_samples : num_train_samples + num_val_samples]
         test_indices = shuffled_indices[len(rest_of_data_frame)-num_test_samples:]
-        print(len(train_indices) + len(val_indices) + len(test_indices))
-        print(len(data_frame))
         our_indices = train_indices + val_indices + test_indices
         total_indices = list(range(len(data_frame)))
         print(set(our_indices) == set(total_indices))
