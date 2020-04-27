@@ -28,6 +28,8 @@ parser.add_argument('--device', type=str, default='cuda', help='Device to use.')
 
 args = parser.parse_args()
 
+args.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
 if(args.tensorboard == 0):
     args.tensorboard = False
 
