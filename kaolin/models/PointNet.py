@@ -260,7 +260,7 @@ class PointNetClassifier(nn.Module):
                  transposed_input: bool = False):
 
         super(PointNetClassifier, self).__init__()
-
+        torch.manual_seed(0)
         if not isinstance(num_classes, int):
             raise TypeError('Argument num_classes must be of type int. '
                             'Got {0} instead.'.format(type(num_classes)))
