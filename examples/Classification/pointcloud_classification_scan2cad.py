@@ -3,7 +3,7 @@ import argparse
 from tqdm import tqdm
 import torch
 from torch.utils.data import DataLoader
-
+import numpy as np
 import matplotlib.pyplot as plt
 import sys
 import time
@@ -163,9 +163,9 @@ print('Test accuracy:', 100 * test_acc)
 
 if(not args.tensorboard):
     plt.figure()
-    plt.plot(np.array(train_acc_lst), label='train_acc', color = blue)
-    plt.plot(np.array(val_acc_lst),label='val_acc', color = yellow)
-    plt.plot(np.array(test_acc_lst), label='test_acc', color = red)
+    plt.plot(np.array(train_acc_lst), label='train_acc', color = 'blue')
+    plt.plot(np.array(val_acc_lst),label='val_acc', color = 'yellow')
+    plt.plot(np.array(test_acc_lst), label='test_acc', color = 'red')
     plt.title("Train Acc vs Validation Acc")
     plt.legend()
     plt.xlabel("Epoch Number")
@@ -173,8 +173,8 @@ if(not args.tensorboard):
     plt.savefig('run_' + args.run_number + "_accuracies_plot.png")
 
     plt.figure()
-    plt.plot(np.array(train_loss_lst), label='train_loss', color = blue)
-    plt.plot(np.array(val_loss_lst),label='val_loss', color = yellow)
+    plt.plot(np.array(train_loss_lst), label='train_loss', color = 'blue')
+    plt.plot(np.array(val_loss_lst),label='val_loss', color = 'yellow')
     plt.title("Train Loss vs Validation Loss")
     plt.legend()
     plt.xlabel("Epoch Number")
