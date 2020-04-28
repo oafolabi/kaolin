@@ -18,11 +18,10 @@
 #SBATCH --gres=gpu:1
 #
 # Wall clock limit:
-#SBATCH --time=24:00:00
+#SBATCH --time=72:00:00
 #
 ## Command(s) to run (example):
 module load python
 module load cuda/10.1
 source activate /global/scratch/akashgokul/kaolin_run
-python3 pointcloud_classification_scan2cad.py --run_number 'Apr27_1_64_20' --tensorboard 0 --batch-size 64 --epochs 20
-python3 pointcloud_classification_scan2cad.py --run_number 'Apr27_2_128_20' --tensorboard 0 --batch-size 128 --epochs 20
+python3 pointcloud_classification_scan2cad.py --run_number 'Apr28_1_64_100' --tensorboard 0 --batch-size 64 --epochs 100
