@@ -145,7 +145,8 @@ for e in range(args.epochs):
 
             # Compute accuracy
             pred_label = torch.argmax(pred, dim=1)
-            test_accuracy += torch.mean((pred_label == batch[1].view(-1)).float()).cpu().item()
+            if(pred_label[0].int() == batch[1][0].int()):
+                test_accuracy += 1
             num_batches += 1
 
     test_loss_e = val_loss / num_batches
