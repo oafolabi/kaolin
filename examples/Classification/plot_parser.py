@@ -2,13 +2,13 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-train_loss = np.load(os.getcwd() + "/successful_runs_2/train_loss.npy")
-val_loss = np.load(os.getcwd() + "/successful_runs_2/val_loss.npy")
+train_loss = np.load(os.getcwd() + "/new_output/train_loss.npy")
+val_loss = np.load(os.getcwd() + "/new_output/val_loss.npy")
 print(train_loss)
 print(train_loss.shape)
 
-train_acc = np.load(os.getcwd() + "/successful_runs_2/train_acc.npy")
-val_acc = np.load(os.getcwd() + "/successful_runs_2/val_acc.npy")
+train_acc = np.load(os.getcwd() + "/new_output/train_acc.npy")
+val_acc = np.load(os.getcwd() + "/new_output/val_acc.npy")
 
 # plt.figure()
 # plt.plot(np.array([100*i for i in train_acc]), label='Training Accuracy')
