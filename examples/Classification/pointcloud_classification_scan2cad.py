@@ -168,6 +168,7 @@ with torch.no_grad():
 
 print('Test accuracy:', 100 * test_acc)
 torch.save(model, 'pointnet_model.pt')
+torch.save(model.state_dict(), 'pointnet_model_state_dict.pt')
 
 
 
