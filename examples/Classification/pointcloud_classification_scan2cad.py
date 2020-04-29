@@ -46,6 +46,7 @@ data_frame = pd.read_csv(data_path)
 data_frame.rename(columns={data_frame.columns[0]:'Filepath', data_frame.columns[1]:'ID'}, inplace=True)
 
 train_dataset = Scan2CAD(data_frame,split='train',transform=transform, device=args.device)
+print(len(train_dataset))
 train_loader = DataLoader(train_dataset,batch_size=args.batch_size, shuffle=True)
 
 val_dataset = Scan2CAD(data_frame,split='validation',transform=transform, device=args.device)
