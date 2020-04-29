@@ -134,7 +134,7 @@ for e in range(args.epochs):
         val_loss_lst.append(val_loss_e)
         val_acc_lst.append(val_acc)
     
-    
+
     test_accuracy = 0 
     num_batches = 0
 
@@ -156,6 +156,7 @@ for e in range(args.epochs):
         np.save('train_loss', np.array(train_loss_lst))
         np.save('val_acc', np.array(val_acc_lst))
         np.save('val_loss', np.array(val_loss_lst))
+        break
 
 # test_loader = DataLoader(ModelNet(args.modelnet_root, categories=args.categories,
 #                                   split='test', transform=transform, device=args.device),
