@@ -29,7 +29,7 @@ from kaolin.transforms import transforms as tfs
 
 #Based off of modelnet.py and its ModelNet dataset class
 class Scan2CAD(object):
-    """ Dataset class for the Scan2CAD dataset of Scannet Chairs <-> CAD ID.
+    """ Dataset class for the Scan2CAD dataset of Scannet Chairs <-> CAD.
 
     Args:
         data_frame (pd Dataframe): Dataframe containing path - CAD ID pairs
@@ -91,7 +91,7 @@ class Scan2CAD(object):
                 self.pred_label_map[pred] = cad_id
             
             #Saves mapping for full-test scenario
-            pred_label_df = pd.DataFrame.from_dict(self.pred_label_map)
+            pred_label_df = pd.DataFrame.from_dict(self.pred_label_map, orient=index)
             print(pred_label_df)
             pred_label_df.to_csv(path_or_buf='pred_label_map.csv')
 
