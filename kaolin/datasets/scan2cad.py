@@ -29,7 +29,7 @@ from kaolin.transforms import transforms as tfs
 
 #Based off of modelnet.py and its ModelNet dataset class
 class Scan2CAD(object):
-    """ Dataset class for the Scan2CAD dataset.
+    """ Dataset class for the Scan2CAD dataset of Scannet Chairs <-> CAD ID.
 
     Args:
         data_frame (pd Dataframe): Dataframe containing path - CAD ID pairs
@@ -37,8 +37,9 @@ class Scan2CAD(object):
             -This should be the ABSOLUTE Filepath of each .off file 
             -Note objects should be .off
 
-        split (str, optional): Split to load ('train' vs 'valid vs 'test' vs 'none' (for full load of data),
+        split (str, optional): Split to load ('train' vs 'valid vs 'test' vs 'full-test' (for full load of data),
             default: 'train').
+            Note: Full-test should be used for data with NO LABELS
 
         transform (callable, optional): A function/transform to apply on each
             loaded example.
@@ -61,7 +62,7 @@ class Scan2CAD(object):
         np.random.seed(42)
 
         split = split.lower()
-        assert split in ['train' , 'validation','test', 'none']
+        assert split in ['train' , 'validation','test', 'full-test']
 
         self.split = split
         self.transform = transform
@@ -70,25 +71,30 @@ class Scan2CAD(object):
         self.data_frame = data_frame
 
         filepaths = data_frame['Filepath']
-        cad_ids = data_frame['ID']
-        self.num_classes = cad_ids.nunique()
-        self.unique_labels = cad_ids.unique()
-
-        #Creates map to take CAD ID strings to numbers for prediction
-        self.label_map = {self.unique_labels[i] : i for i in range(len(self.unique_labels))}
-
-        #Creates inverse map to take predictions -> CAD ID strings
-        self.pred_label_map = {}
-        for cad_id in self.label_map.keys():
-            pred = self.label_map[cad_id]
-            self.pred_label_map[pred] = cad_id
-        
-        #Uses entire dataset in the case that no split is needed
-        if(split == 'none'):
+        if(split == 'full-test'):
             self.filepaths = filepaths
-            self.cad_ids = cad_ids
+            #Original data was trained/tested on 316 classes
+            self.num_classes = 316
 
         else:
+            cad_ids = data_frame['ID']
+            self.num_classes = cad_ids.nunique()
+            self.unique_labels = cad_ids.unique()
+
+            #Creates map to take CAD ID strings to numbers for prediction
+            self.label_map = {self.unique_labels[i] : i for i in range(len(self.unique_labels))}
+
+            #Creates inverse map to take predictions -> CAD ID strings
+            self.pred_label_map = {}
+            for cad_id in self.label_map.keys():
+                pred = self.label_map[cad_id]
+                self.pred_label_map[pred] = cad_id
+            
+            #Saves mapping for full-test scenario
+            pred_label_df = pd.DataFrame.from_dict(self.pred_label_map)
+            print(pred_label_df)
+            pred_label_df.to_csv(path_or_buf='pred_label_map.csv')
+
             #Does the data split
             ct_cad_ids = cad_ids.value_counts()
             s = ct_cad_ids.to_frame(name='Count')
@@ -138,9 +144,9 @@ class Scan2CAD(object):
 
 
     def __len__(self):
-        if(self.split == 'none'):
-            len(self.cad_ids)
-            
+        if(self.split == 'full-test'):
+            len(self.filepaths)
+
         elif(self.split == 'train'):
             return len(self.train_cad_ids)
         elif(self.split == 'validation'):
@@ -156,16 +162,19 @@ class Scan2CAD(object):
         #To redefine split 
         # I never actually used this function, but feel free to use it
         split = split.lower()
-        assert split in ['train' , 'validation','test', 'none']
+        assert split in ['train' , 'validation','test', 'full-test']
         self.split = split
 
     def __getitem__(self, index):
         """Returns the item at index idx. """
 
-        if(self.split == 'none'):
+        if(self.split == 'full-test'):
             data = TriangleMesh.from_off(self.filepaths[index])
-            cad_id = self.cad_ids[index]
-            label = self.label_map[cad_id]
+            if(self.transform):
+                data = self.transform(data)
+            
+            #Returning filepath for book-keeping purposes
+            return self.filepaths[index], data
 
         elif(self.split == 'train'):
             data = TriangleMesh.from_off(self.train_filepaths[index])
