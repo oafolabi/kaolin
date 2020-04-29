@@ -91,6 +91,7 @@ class Scan2CAD(object):
                 self.pred_label_map[pred] = cad_id
             
             #Saves mapping for full-test scenario
+            print(self.pred_label_map)
             pred_label_df = pd.DataFrame.from_dict(self.pred_label_map, orient='index')
             print(pred_label_df)
             pred_label_df.to_csv(path_or_buf='pred_label_map.csv')
