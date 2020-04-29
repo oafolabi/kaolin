@@ -182,10 +182,11 @@ with torch.no_grad():
         num_batches += 1
     test_acc = test_acc / num_batches
     
-    if(args.tensorboard):
-        writer.add_scalar('Final Test Accuracy', test_acc, 0)
-    else:
-        test_acc_lst.append(test_acc)
+    # if(args.tensorboard):
+    #     writer.add_scalar('Final Test Accuracy', test_acc, 0)
+    # else:
+    #     test_acc_lst.append(test_acc)
+    
 print('Test accuracy:', 100 * test_acc)
 torch.save(model.state_dict(), "mined_scannet_chairs_pointnet1_model.pt")
 
