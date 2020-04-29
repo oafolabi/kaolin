@@ -134,7 +134,7 @@ for e in range(args.epochs):
         val_loss_lst.append(val_loss_e)
         val_acc_lst.append(val_acc)
     
-    test_loss = 0
+    
     test_accuracy = 0 
     num_batches = 0
 
@@ -142,15 +142,12 @@ for e in range(args.epochs):
         print("\n Testing \n")
         for idx, batch in enumerate(tqdm(test_loader)):
             pred = model(batch[0])
-            loss = criterion(pred, batch[1].view(-1))
-            test_loss += loss.item()
 
             # Compute accuracy
             pred_label = torch.argmax(pred, dim=1)
             test_accuracy += torch.mean((pred_label == batch[1].view(-1)).float()).cpu().item()
             num_batches += 1
 
-    test_loss_e = val_loss / num_batches
     test_acc = 100 * test_accuracy / num_batches
     print("-------\n"*2)
     print('Test accuracy:', test_acc)

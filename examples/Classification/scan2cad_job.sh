@@ -1,6 +1,6 @@
 #!/bin/bash
 # Job name:
-#SBATCH --job-name=scan2cad_apr_25_2020
+#SBATCH --job-name=scan2cad_apr_28_2020
 #
 # Account:
 #SBATCH --account=fc_vivelab
@@ -24,4 +24,5 @@
 module load python
 module load cuda/10.1
 source activate /global/scratch/akashgokul/kaolin_run
-python3 pointcloud_classification_scan2cad.py --run_number 'Apr28_1_64_100' --tensorboard 0 --batch-size 64 --epochs 100
+python3 pointcloud_classification_scan2cad.py --run_number 'Apr28_1_64_150' --tensorboard 0 --batch-size 64 --epochs 150
+python3 pointcloud_classification_scan2cad.py --run_number 'Apr28_1_128_150' --tensorboard 0 --batch-size 128 --epochs 150
