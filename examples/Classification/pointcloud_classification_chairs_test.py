@@ -1,10 +1,15 @@
-import argparse
 
+###
+# File to Test the saved Pointnet V1 model for the mined_scannet_chairs dataset
+###
+
+import argparse
 from tqdm import tqdm
 import torch
 from torch.utils.data import DataLoader
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 import sys
 import time
 sys.path.append("..")
@@ -15,14 +20,7 @@ import kaolin.transforms as tfs
 import pandas as pd
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--run_number', type = str, default = '0', help='Run Number of log')
-#parser.add_argument('--modelnet-root', type=str, help='Root directory of the ModelNet dataset.')
-#parser.add_argument('--categories', type=str, nargs='+', default=['chair', 'sofa'], help='list of object classes to use.')
-parser.add_argument('--num-points', type=int, default=1024, help='Number of points to sample from meshes.')
-parser.add_argument('--epochs', type=int, default=10, help='Number of train epochs.')
-parser.add_argument('-lr', '--learning-rate', type=float, default=1e-3, help='Learning rate.')
-parser.add_argument('--batch-size', type=int, default=64, help='Batch size.')
-parser.add_argument('--device', type=str, default='cuda', help='Device to use.')
+parser.add_argument('--csv_path', type=str, help = 'Path to CSV containing Filepaths - CAD IDs')
 
 args = parser.parse_args()
 
@@ -30,27 +28,21 @@ args.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 transform = tfs.Compose([
-    tfs.TriangleMeshToPointCloud(num_samples=args.num_points),
+    tfs.TriangleMeshToPointCloud(num_samples=1024),
     tfs.NormalizePointCloud()
 ])
 
-data_path = '/global/scratch/akashgokul/mined_scannet_chairs/data.csv'
+data_path = args.csv_path
 data_frame = pd.read_csv(data_path)
 data_frame.rename(columns={data_frame.columns[0]:'Filepath', data_frame.columns[1]:'ID'}, inplace=True)
 
-train_dataset = Scan2CAD(data_frame,split='train',transform=transform, device=args.device)
-train_loader = DataLoader(train_dataset,batch_size=args.batch_size, shuffle=True)
+#Instantiates dataset and dataloader for the data from the csv file
+dataset = Scan2CAD(data_frame, split='none', transform=transform, device = args.device)
+dataloader = DataLoader(dataset, batch_size = 1, shuffle = True)
 
-val_dataset = Scan2CAD(data_frame,split='validation',transform=transform, device=args.device)
-val_loader = DataLoader(val_dataset,batch_size=1, shuffle=True)
 
-test_dataset = Scan2CAD(data_frame,split='test',transform=transform, device=args.device)
-test_loader = DataLoader(test_dataset,batch_size=1, shuffle=True)
-
-#Same num_classes for all datasets
-#316 Classes
-num_cad_classes = train_dataset.get_num_classes()
-model = PointNetClassifier(num_classes=num_cad_classes).to(args.device)
+# From original data there are 316 classes
+model = PointNetClassifier(num_classes=316).to(args.device)
 optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 criterion = torch.nn.CrossEntropyLoss()
 
@@ -167,7 +159,7 @@ with torch.no_grad():
     
 
 print('Test accuracy:', 100 * test_acc)
-torch.save(model, 'pointnet_model.pt')
+torch.save(model.state_dict(), "mined_scannet_chairs_pointnet1_model.pt")
 
 
 
