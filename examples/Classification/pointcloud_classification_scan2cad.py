@@ -185,26 +185,27 @@ with torch.no_grad():
     else:
         test_acc_lst.append(test_acc)
 print('Test accuracy:', 100 * test_acc)
+torch.save(model.state_dict(), "mined_scannet_chairs_pointnet1_model.pt")
 
-if(not args.tensorboard):
-    plt.figure()
-    plt.plot(np.array(train_acc_lst), label='train_acc', color = 'blue')
-    plt.plot(np.array(val_acc_lst),label='val_acc', color = 'yellow')
-    plt.plot(np.array(test_acc_lst), label='test_acc', color = 'red')
-    plt.title("Train Acc vs Validation Acc")
-    plt.legend()
-    plt.xlabel("Epoch Number")
-    plt.ylabel("Accuracy Percent")
-    plt.savefig('run_' + args.run_number + "_accuracies_plot.png")
+# if(not args.tensorboard):
+#     plt.figure()
+#     plt.plot(np.array(train_acc_lst), label='train_acc', color = 'blue')
+#     plt.plot(np.array(val_acc_lst),label='val_acc', color = 'yellow')
+#     plt.plot(np.array(test_acc_lst), label='test_acc', color = 'red')
+#     plt.title("Train Acc vs Validation Acc")
+#     plt.legend()
+#     plt.xlabel("Epoch Number")
+#     plt.ylabel("Accuracy Percent")
+#     plt.savefig('run_' + args.run_number + "_accuracies_plot.png")
 
-    plt.figure()
-    plt.plot(np.array(train_loss_lst), label='train_loss', color = 'blue')
-    plt.plot(np.array(val_loss_lst),label='val_loss', color = 'yellow')
-    plt.title("Train Loss vs Validation Loss")
-    plt.legend()
-    plt.xlabel("Epoch Number")
-    plt.ylabel("Loss")
-    plt.savefig('run_' + args.run_number + "_loss_plot.png")
+#     plt.figure()
+#     plt.plot(np.array(train_loss_lst), label='train_loss', color = 'blue')
+#     plt.plot(np.array(val_loss_lst),label='val_loss', color = 'yellow')
+#     plt.title("Train Loss vs Validation Loss")
+#     plt.legend()
+#     plt.xlabel("Epoch Number")
+#     plt.ylabel("Loss")
+#     plt.savefig('run_' + args.run_number + "_loss_plot.png")
 
 
 
