@@ -56,8 +56,8 @@ test_dataset = Scan2CAD(data_frame,split='test',transform=transform, device=args
 test_loader = DataLoader(test_dataset,batch_size=1, shuffle=True)
 
 #Same num_classes for all datasets
+#316 Classes
 num_cad_classes = train_dataset.get_num_classes()
-print(num_cad_classes)
 model = PointNetClassifier(num_classes=num_cad_classes).to(args.device)
 optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 criterion = torch.nn.CrossEntropyLoss()
@@ -169,6 +169,7 @@ model.eval()
 
 test_acc = 0.
 print("Testing")
+
 with torch.no_grad():
     num_batches = 0
     for idx, test_batch in enumerate(tqdm(test_loader)):
