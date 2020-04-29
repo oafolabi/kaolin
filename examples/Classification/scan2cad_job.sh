@@ -20,9 +20,10 @@
 # Wall clock limit:
 #SBATCH --time=72:00:00
 #
+#SBATCH --mail-type=END,FAIL
+#SBATCH --mail-user=akashgokul@berkeley.edu
 ## Command(s) to run (example):
 module load python
 module load cuda/10.1
 source activate /global/scratch/akashgokul/kaolin_run
-python3 pointcloud_classification_scan2cad.py --run_number 'Apr28_1_512_150' --tensorboard 0 --batch-size 512 --epochs 150
-python3 pointcloud_classification_scan2cad.py --run_number 'Apr28_1_32_150' --tensorboard 0 --batch-size 32 --epochs 150
+python3 pointcloud_classification_scan2cad.py --run_number 'Apr28_2_32_150' --tensorboard 0 --batch-size 32 --epochs 150

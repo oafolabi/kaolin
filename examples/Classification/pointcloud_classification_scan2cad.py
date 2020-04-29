@@ -151,7 +151,7 @@ for e in range(args.epochs):
     test_acc = 100 * test_accuracy / num_batches
     print("-------\n"*2)
     print('Test accuracy:', test_acc)
-    if(test_acc >= 80):
+    if(test_acc >= 85):
         np.save('train_acc', np.array(train_acc_lst))
         np.save('train_loss', np.array(train_loss_lst))
         np.save('val_acc', np.array(val_acc_lst))
