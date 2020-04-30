@@ -43,9 +43,9 @@ print(train_dataset.get_num_classes())
 print(len(train_dataset))
 train_loader = DataLoader(train_dataset,batch_size=args.batch_size, shuffle=True)
 
-val_dataset = Scan2CAD(data_frame,split='validation',transform=transform, device=args.device)
-print(len(val_dataset))
-val_loader = DataLoader(val_dataset,batch_size=1, shuffle=True)
+# val_dataset = Scan2CAD(data_frame,split='validation',transform=transform, device=args.device)
+# print(len(val_dataset))
+# val_loader = DataLoader(val_dataset,batch_size=1, shuffle=True)
 
 test_dataset = Scan2CAD(data_frame,split='test',transform=transform, device=args.device)
 test_loader = DataLoader(test_dataset,batch_size=1, shuffle=True)
@@ -110,7 +110,7 @@ for e in range(args.epochs):
 
     with torch.no_grad():
         print("\n Validation Testing \n")
-        for idx, batch in enumerate(tqdm(val_loader)):
+        for idx, batch in enumerate(tqdm(test_loader)):
             pred = model(batch[0])
             loss = criterion(pred, batch[1].view(-1))
             val_loss += loss.item()
@@ -129,23 +129,23 @@ for e in range(args.epochs):
     val_acc_lst.append(val_acc)
     
 
-    test_accuracy = 0 
-    num_batches = 0
+    test_accuracy = val_acc 
+    # num_batches = 0
 
-    with torch.no_grad():
-        print("\n Testing \n")
-        for idx, batch in enumerate(tqdm(test_loader)):
-            pred = model(batch[0])
+    # with torch.no_grad():
+    #     print("\n Testing \n")
+    #     for idx, batch in enumerate(tqdm(test_loader)):
+    #         pred = model(batch[0])
 
-            # Compute accuracy
-            pred_label = torch.argmax(pred, dim=1)
-            test_accuracy += torch.mean((pred_label == batch[1].view(-1)).float()).cpu().item()
-            num_batches += 1
+    #         # Compute accuracy
+    #         pred_label = torch.argmax(pred, dim=1)
+    #         test_accuracy += torch.mean((pred_label == batch[1].view(-1)).float()).cpu().item()
+    #         num_batches += 1
 
-    test_acc = 100 * test_accuracy / num_batches
+    # test_acc = 100 * test_accuracy / num_batches
     print("-------\n"*2)
     print('Test accuracy:', test_acc)
-    if(test_acc >= 80):
+    if(val_acc >= 80):
         np.save('train_acc_' + args.run_number, np.array(train_acc_lst))
         np.save('train_loss_' + args.run_number, np.array(train_loss_lst))
         np.save('val_acc_' + args.run_number, np.array(val_acc_lst))
