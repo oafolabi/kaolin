@@ -17,7 +17,7 @@ from typing import Iterable
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-torch.manual_seed(0)
+torch.manual_seed(42)
 
 
 class PointNetFeatureExtractor(nn.Module):
