@@ -10,6 +10,7 @@ print("This code generates a csv file containing the directory of each off file 
 print("------"*10)
 
 def transform_pcd(root_dir, ply_dir):
+    print(ply_dir)
     mesh = o3d.io.read_triangle_mesh(ply_dir)
     off_dir = root_dir + "/model.off"
     o3d.io.write_triangle_mesh(off_dir, mesh)
