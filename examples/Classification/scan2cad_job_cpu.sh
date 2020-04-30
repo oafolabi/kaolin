@@ -28,4 +28,4 @@ echo "Run number dd_0"
 module load python
 module load cuda/10.1
 source activate /global/scratch/akashgokul/kaolin_run
-python3 pointcloud_classification_scan2cad.py --run_number 0 --batch-size 128 --epochs 500
+python3 pointcloud_classification_scan2cad.py --run_number dd_0 --batch-size 32 --epochs 100
