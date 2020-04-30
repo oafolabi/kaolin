@@ -138,7 +138,7 @@ class Scan2CAD(object):
             self.test_cad_ids = self.test_data_frame['ID']
 
             train_indices_lst = self.train_data_frame.index.tolist()
-            val_indices_lst = self.validation_data_frame.index.tolist()
+            # val_indices_lst = self.validation_data_frame.index.tolist()
             test_indices_lst = self.test_data_frame.index.tolist()
 
 
