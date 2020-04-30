@@ -15,7 +15,7 @@ import kaolin.transforms as tfs
 import pandas as pd
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--run_number', type = str, default = '0', help='Run Number of log')
+# parser.add_argument('--run_number', type = str, default = '0', help='Run Number of log')
 #parser.add_argument('--modelnet-root', type=str, help='Root directory of the ModelNet dataset.')
 #parser.add_argument('--categories', type=str, nargs='+', default=['chair', 'sofa'], help='list of object classes to use.')
 parser.add_argument('--num-points', type=int, default=1024, help='Number of points to sample from meshes.')
