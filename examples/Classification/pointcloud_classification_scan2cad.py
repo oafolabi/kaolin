@@ -20,7 +20,7 @@ parser.add_argument('--run_number', type = str, default = '0', help='Run Number 
 #parser.add_argument('--categories', type=str, nargs='+', default=['chair', 'sofa'], help='list of object classes to use.')
 parser.add_argument('--num-points', type=int, default=1024, help='Number of points to sample from meshes.')
 parser.add_argument('--epochs', type=int, default=10, help='Number of train epochs.')
-parser.add_argument('-lr', '--learning-rate', type=float, default=1e-3, help='Learning rate.')
+parser.add_argument('--learning-rate', type=float, default=1e-3, help='Learning rate.')
 parser.add_argument('--batch-size', type=int, default=64, help='Batch size.')
 parser.add_argument('--device', type=str, default='cuda', help='Device to use.')
 
