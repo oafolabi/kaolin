@@ -23,8 +23,8 @@
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=akashgokul@berkeley.edu
 ## Command(s) to run (example):
-echo "128 bz 500 ep"
-echo "Run number 0"
+echo "32 bz 100 ep"
+echo "Run number dd_0"
 module load python
 module load cuda/10.1
 source activate /global/scratch/akashgokul/kaolin_run
