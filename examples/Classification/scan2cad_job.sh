@@ -15,7 +15,7 @@
 #SBATCH --ntasks-per-node=2
 #
 #Request GPUs
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:2
 #
 # Wall clock limit:
 #SBATCH --time=72:00:00
