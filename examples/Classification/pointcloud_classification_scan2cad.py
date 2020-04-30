@@ -147,6 +147,8 @@ for e in range(args.epochs):
         np.save('train_loss', np.array(train_loss_lst))
         np.save('val_acc', np.array(val_acc_lst))
         np.save('val_loss', np.array(val_loss_lst))
+        torch.save(model, 'pointnet_model.pt')
+        torch.save(model.state_dict(), 'pointnet_model_state_dict.pt')
         break
 
 # test_loader = DataLoader(ModelNet(args.modelnet_root, categories=args.categories,
@@ -173,9 +175,11 @@ with torch.no_grad():
     
 
 print('Test accuracy:', 100 * test_acc)
-#Added torch save model just in case, previously only saved dict
-torch.save(model, 'pointnet_model.pt')
-torch.save(model.state_dict(), 'pointnet_model_state_dict.pt')
+
+np.save('train_acc_full', np.array(train_acc_lst))
+np.save('train_loss_full', np.array(train_loss_lst))
+np.save('val_acc_full', np.array(val_acc_lst))
+np.save('val_loss_full', np.array(val_loss_lst))
 
 
 
