@@ -168,7 +168,7 @@ class Scan2CAD(object):
         """Returns the item at index idx. """
 
         if(self.split == 'full-test'):
-            data = TriangleMesh.from_off(self.filepaths[index])
+            data = TriangleMesh.from_obj(self.filepaths[index])
             if(self.transform):
                 data = self.transform(data)
             
@@ -176,17 +176,17 @@ class Scan2CAD(object):
             return self.filepaths[index], data
 
         elif(self.split == 'train'):
-            data = TriangleMesh.from_off(self.train_filepaths[index])
+            data = TriangleMesh.from_obj(self.train_filepaths[index])
             cad_id = self.train_cad_ids[index]
             label = self.label_map[cad_id]
         
         elif(self.split == 'validation'):
-            data = TriangleMesh.from_off(self.validation_filepaths[index])
+            data = TriangleMesh.from_obj(self.validation_filepaths[index])
             cad_id = self.validation_cad_ids[index]
             label = self.label_map[cad_id]
         
         elif(self.split == 'test'):
-            data = TriangleMesh.from_off(self.test_filepaths[index])
+            data = TriangleMesh.from_obj(self.test_filepaths[index])
             cad_id = self.test_cad_ids[index]
             label = self.label_map[cad_id]
 
