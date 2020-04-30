@@ -28,4 +28,4 @@ echo "Run number merge_3"
 module load python
 module load cuda/10.1
 source activate /global/scratch/akashgokul/kaolin_run
-python3 pointcloud_classification_scan2cad.py --learning-rate 1 --epochs 200 --run_number merge3_128_200_1 --batch-size 128
+python3 pointcloud_classification_scan2cad.py --learning-rate 1 --epochs 50 --run_number thresh_128_50_1 --batch-size 128

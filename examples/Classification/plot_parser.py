@@ -2,13 +2,13 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-train_loss = np.load(os.getcwd() + "/last_night_run/train_loss_full.npy")
-val_loss = np.load(os.getcwd() + "/last_night_run/val_loss_full.npy")
+train_loss = np.load(os.getcwd() + "/data/train_loss_full_dd_0.npy")
+val_loss = np.load(os.getcwd() + "/data/val_loss_full_dd_0.npy")
 print(train_loss)
 print(train_loss.shape)
 
-train_acc = np.load(os.getcwd() + "/last_night_run/train_acc_full.npy")
-val_acc = np.load(os.getcwd() + "/last_night_run/val_acc_full.npy")
+train_acc = np.load(os.getcwd() + "/data/train_acc_full_dd_0.npy")
+val_acc = np.load(os.getcwd() + "/data/val_acc_full_dd_0.npy")
 print(val_acc)
 
 plt.figure()
