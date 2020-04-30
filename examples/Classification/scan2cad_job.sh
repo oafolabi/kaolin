@@ -26,4 +26,4 @@
 module load python
 module load cuda/10.1
 source activate /global/scratch/akashgokul/kaolin_run
-python3 pointcloud_classification_scan2cad.py --batch-size 64 --epochs 10
+python3 pointcloud_classification_scan2cad.py --batch-size 64 --epochs 50
