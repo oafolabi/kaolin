@@ -2,13 +2,13 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-train_loss = np.load(os.getcwd() + "/data/train_loss_full_dd_0.npy")
-val_loss = np.load(os.getcwd() + "/data/val_loss_full_dd_0.npy")
+train_loss = np.load(os.getcwd() + "/data/train_loss_full_merge2_128_50_1.npy")
+val_loss = np.load(os.getcwd() + "/data/val_loss_full_merge2_128_50_1.npy")
 print(train_loss)
 print(train_loss.shape)
 
-train_acc = np.load(os.getcwd() + "/data/train_acc_full_dd_0.npy")
-val_acc = np.load(os.getcwd() + "/data/val_acc_full_dd_0.npy")
+train_acc = np.load(os.getcwd() + "/data/train_acc_full_merge2_128_50_1.npy")
+val_acc = np.load(os.getcwd() + "/data/val_acc_full_merge2_128_50_1.npy")
 print(val_acc)
 
 plt.figure()
@@ -18,7 +18,7 @@ plt.xlabel("Epoch Number")
 plt.ylabel("Accuracy (%)")
 plt.legend()
 plt.title("Training and Validation Accuracies of Pointnet")
-plt.savefig("accuracies.png")
+plt.savefig("accuracies_merge2_128.png")
 
 plt.figure()
 plt.plot(np.array(train_loss), label='Training Loss')
@@ -27,4 +27,4 @@ plt.xlabel("Epoch Number")
 plt.ylabel("Loss (Cross-Entropy)")
 plt.legend()
 plt.title("Training and Validation Losses of Pointnet")
-plt.savefig("losses.png")
+plt.savefig("losses_merge2_128.png")
