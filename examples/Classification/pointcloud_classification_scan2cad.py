@@ -15,7 +15,7 @@ import kaolin.transforms as tfs
 import pandas as pd
 
 parser = argparse.ArgumentParser()
-# parser.add_argument('--run_number', type = str, default = '0', help='Run Number of log')
+parser.add_argument('--run_number', type = str, default = '0', help='Run Number of log')
 #parser.add_argument('--modelnet-root', type=str, help='Root directory of the ModelNet dataset.')
 #parser.add_argument('--categories', type=str, nargs='+', default=['chair', 'sofa'], help='list of object classes to use.')
 parser.add_argument('--num-points', type=int, default=1024, help='Number of points to sample from meshes.')
@@ -143,12 +143,12 @@ for e in range(args.epochs):
     print("-------\n"*2)
     print('Test accuracy:', test_acc)
     if(test_acc >= 80):
-        np.save('train_acc', np.array(train_acc_lst))
-        np.save('train_loss', np.array(train_loss_lst))
-        np.save('val_acc', np.array(val_acc_lst))
-        np.save('val_loss', np.array(val_loss_lst))
-        torch.save(model, 'pointnet_model.pt')
-        torch.save(model.state_dict(), 'pointnet_model_state_dict.pt')
+        np.save('train_acc_' + args.run_number, np.array(train_acc_lst))
+        np.save('train_loss_' + args.run_number, np.array(train_loss_lst))
+        np.save('val_acc_' + args.run_number, np.array(val_acc_lst))
+        np.save('val_loss_' + args.run_number, np.array(val_loss_lst))
+        torch.save(model, 'pointnet_model_' + args.run_number + '.pt')
+        torch.save(model.state_dict(), 'pointnet_model_state_dict' + args.run_number + '.pt')
         break
 
 # test_loader = DataLoader(ModelNet(args.modelnet_root, categories=args.categories,
@@ -176,10 +176,10 @@ with torch.no_grad():
 
 print('Test accuracy:', 100 * test_acc)
 
-np.save('train_acc_full', np.array(train_acc_lst))
-np.save('train_loss_full', np.array(train_loss_lst))
-np.save('val_acc_full', np.array(val_acc_lst))
-np.save('val_loss_full', np.array(val_loss_lst))
+np.save('train_acc_full_'+args.run_number, np.array(train_acc_lst))
+np.save('train_loss_full_'+args.run_number, np.array(train_loss_lst))
+np.save('val_acc_full_'+args.run_number, np.array(val_acc_lst))
+np.save('val_loss_full_'+args.run_number, np.array(val_loss_lst))
 
 
 
