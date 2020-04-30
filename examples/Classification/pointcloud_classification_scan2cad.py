@@ -34,7 +34,7 @@ transform = tfs.Compose([
     tfs.NormalizePointCloud()
 ])
 
-data_path = '/global/scratch/akashgokul/mined_scannet_chairs/data.csv'
+data_path = '/global/scratch/oafolabi/data/mined_scannet_chairs/data.csv'
 data_frame = pd.read_csv(data_path)
 data_frame.rename(columns={data_frame.columns[0]:'Filepath', data_frame.columns[1]:'ID'}, inplace=True)
 
