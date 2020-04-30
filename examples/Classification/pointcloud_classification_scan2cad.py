@@ -92,9 +92,9 @@ for e in range(args.epochs):
         num_batches += 1
     
     train_loss_e = train_loss / num_batches
-    train_acc = train_accuracy / num_batches
+    train_acc = 100 * train_accuracy / num_batches
     print('Train loss:', train_loss_e)
-    print('Train accuracy:', 100 * train_acc)
+    print('Train accuracy:', train_acc)
 
     train_loss_lst.append(train_loss_e)
     train_acc_lst.append(train_acc)
@@ -118,9 +118,9 @@ for e in range(args.epochs):
             num_batches += 1
 
     val_loss_e = val_loss / num_batches
-    val_acc = val_accuracy / num_batches
+    val_acc = 100 * val_accuracy / num_batches
     print('Val loss:', val_loss_e)
-    print('Val accuracy:', 100 * val_acc)
+    print('Val accuracy:', val_acc)
 
     val_loss_lst.append(val_loss_e)
     val_acc_lst.append(val_acc)
