@@ -30,8 +30,9 @@ for scene in scenes:
         cad_id = cad_id_file.readline()
 
         ply_dir = chair_dir_path + "/cropped_mesh.ply"
-        off_dir = transform_pcd(chair_dir_path, ply_dir)
-        chair_id_dict[off_dir] = cad_id
+        if(os.path.exists(ply_dir)):
+            off_dir = transform_pcd(chair_dir_path, ply_dir)
+            chair_id_dict[off_dir] = cad_id
         
 
 data = pd.DataFrame.from_dict(chair_id_dict, orient='index')
