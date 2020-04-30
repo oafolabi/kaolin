@@ -50,7 +50,13 @@ test_loader = DataLoader(test_dataset,batch_size=1, shuffle=True)
 #Same num_classes for all datasets
 #316 Classes
 num_cad_classes = train_dataset.get_num_classes()
-model = PointNetClassifier(num_classes=num_cad_classes).to(args.device)
+model = PointNetClassifier(num_classes=num_cad_classes)
+if torch.cuda.device_count() > 1:
+  print("Let's use", torch.cuda.device_count(), "GPUs!")
+  # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
+  model = nn.DataParallel(model)
+else:
+    model.to(args.device)
 optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 criterion = torch.nn.CrossEntropyLoss()
 
