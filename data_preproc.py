@@ -3,7 +3,7 @@ import pandas as pd
 import open3d as o3d
 import numpy as np
 
-ROOTDIR = "/global/scratch/akashgokul/mined_scannet_chairs/"
+ROOTDIR = "/global/scratch/users/oafolabi/data/mined_scannet_data/"
 
 print("------"*10)
 print("This code generates a csv file containing the directory of each off file and it's CAD id")
