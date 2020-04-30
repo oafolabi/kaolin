@@ -129,7 +129,7 @@ for e in range(args.epochs):
     val_acc_lst.append(val_acc)
     
 
-    test_accuracy = val_acc 
+    # test_accuracy = val_acc 
     # num_batches = 0
 
     # with torch.no_grad():
@@ -143,6 +143,7 @@ for e in range(args.epochs):
     #         num_batches += 1
 
     # test_acc = 100 * test_accuracy / num_batches
+    test_acc = val_acc
     print("-------\n"*2)
     print('Test accuracy:', test_acc)
     if(val_acc >= 80):
