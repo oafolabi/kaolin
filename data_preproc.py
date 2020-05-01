@@ -12,7 +12,7 @@ print("------"*10)
 
 def transform_pcd(root_dir, ply_dir):
     mesh = o3d.io.read_triangle_mesh(ply_dir)
-    off_dir = root_dir + "/mesh_model_normalized.obj"
+    off_dir = root_dir + "/model_normalized.obj"
     o3d.io.write_triangle_mesh(off_dir, mesh)
     return off_dir
 
@@ -40,7 +40,7 @@ for scene in scenes:
 
 data = pd.DataFrame.from_dict(chair_id_dict, orient='index')
 print(data)
-data_dir = ROOTDIR + "data_tl.csv"
+data_dir = ROOTDIR + "data.csv"
 data.to_csv(path_or_buf=data_dir)
 print("------"*10)
 print("Done! \n Data can be found at: " + data_dir)
