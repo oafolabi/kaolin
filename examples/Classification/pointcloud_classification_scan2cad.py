@@ -35,8 +35,11 @@ transform = tfs.Compose([
 ])
 
 data_path = '/global/scratch/oafolabi/data/mined_scannet_chairs/data.csv'
+data_path_true = '/global/scratch/oafolabi/data/mined_scannet_chairs/data_tl.csv'
 data_frame = pd.read_csv(data_path)
+true_df = pd.read_csv(data_path_true)
 data_frame.rename(columns={data_frame.columns[0]:'Filepath', data_frame.columns[1]:'ID'}, inplace=True)
+true_df.rename(columns={data_frame.columns[0]:'Filepath', data_frame.columns[1]:'ID'}, inplace=True)
 
 train_dataset = Scan2CAD(data_frame,split='train',transform=transform, device=args.device)
 print(train_dataset.get_num_classes())
@@ -50,6 +53,9 @@ train_loader = DataLoader(train_dataset,batch_size=args.batch_size, shuffle=True
 test_dataset = Scan2CAD(data_frame,split='test',transform=transform, device=args.device)
 test_loader = DataLoader(test_dataset,batch_size=1, shuffle=True)
 print(len(test_dataset))
+
+true_test_dataset = Scan2CAD(true_df, split='full-test',transform=transform, device=args.device)
+true_test_loader = DataLoader(true_test_dataset, batch_size = 1, shuffle = True)
 #Same num_classes for all datasets
 #316 Classes
 num_cad_classes = train_dataset.get_num_classes()
@@ -167,7 +173,7 @@ print("Testing")
 
 with torch.no_grad():
     num_batches = 0
-    for idx, test_batch in enumerate(tqdm(test_loader)):
+    for idx, test_batch in enumerate(tqdm(true_test_loader)):
         pred = model(test_batch[0])
         pred_labels = torch.argmax(pred, dim=1)
         #assuming test-batch 1
@@ -184,6 +190,7 @@ np.save('train_acc_full_'+args.run_number, np.array(train_acc_lst))
 np.save('train_loss_full_'+args.run_number, np.array(train_loss_lst))
 np.save('val_acc_full_'+args.run_number, np.array(val_acc_lst))
 np.save('val_loss_full_'+args.run_number, np.array(val_loss_lst))
+np.save('true_test_acc', np.array([test_acc]))
 
 
 
