@@ -12,7 +12,7 @@
 #SBATCH --nodes=1
 #
 # Request cores (24, for example)
-#SBATCH --ntasks-per-node=8
+#SBATCH --ntasks-per-node=2
 #
 #Request CPU
 #SBATCH --cpus-per-task=8
