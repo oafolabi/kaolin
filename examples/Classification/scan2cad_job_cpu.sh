@@ -12,10 +12,10 @@
 #SBATCH --nodes=1
 #
 # Request cores (24, for example)
-#SBATCH --ntasks-per-node=2
+#SBATCH --ntasks-per-node=8
 #
 #Request CPU
-#SBATCH --cpus-per-task=2
+#SBATCH --cpus-per-task=8
 #
 # Wall clock limit:
 #SBATCH --time=72:00:00
@@ -28,4 +28,4 @@ echo "Run number merge_4"
 module load python
 module load cuda/10.1
 source activate /global/scratch/akashgokul/kaolin_run
-python3 pointcloud_classification_scan2cad.py --epochs 1000 --run_number thresh_12_1000 --batch-size 12
+python3 pointcloud_classification_scan2cad.py --epochs 15 --run_number TL1 --batch-size 128
