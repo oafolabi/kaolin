@@ -18,7 +18,7 @@
 #SBATCH --gres=gpu:2
 #
 #Request CPU
-#SBATCH --cpus-per-task=16
+#SBATCH --cpus-per-task=8
 #
 # Wall clock limit:
 #SBATCH --time=72:00:00
