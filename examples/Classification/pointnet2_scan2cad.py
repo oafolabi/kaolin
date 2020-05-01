@@ -28,6 +28,7 @@ parser.add_argument('--device', type=str, default='cuda', help='Device to use.')
 
 args = parser.parse_args()
 
+args.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 transform = tfs.Compose([
     tfs.TriangleMeshToPointCloud(num_samples=args.num_points),

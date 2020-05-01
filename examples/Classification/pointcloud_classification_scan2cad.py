@@ -34,17 +34,17 @@ transform = tfs.Compose([
     tfs.NormalizePointCloud()
 ])
 
-data_path = '/global/scratch/oafolabi/data/mined_scannet_chairs/data.csv'
-data_path_true = '/global/scratch/oafolabi/data/mined_scannet_chairs/data_tl.csv'
+data_path = "/global/scratch/akashgokul/mined_scannet_chairs/data.csv"
+data_path_true = '/global/scratch/oafolabi/data/mined_scannet_chairs/data.csv'
 data_frame = pd.read_csv(data_path)
 true_df = pd.read_csv(data_path_true)
 data_frame.rename(columns={data_frame.columns[0]:'Filepath', data_frame.columns[1]:'ID'}, inplace=True)
 true_df.rename(columns={data_frame.columns[0]:'Filepath', data_frame.columns[1]:'ID'}, inplace=True)
 
-# train_dataset = Scan2CAD(data_frame,split='train',transform=transform, device=args.device)
-# print(train_dataset.get_num_classes())
-# print(len(train_dataset))
-# train_loader = DataLoader(train_dataset,batch_size=args.batch_size, shuffle=True)
+train_dataset = Scan2CAD(data_frame,split='train-tl',transform=transform, device=args.device)
+print(train_dataset.get_num_classes())
+print(len(train_dataset))
+train_loader = DataLoader(train_dataset,batch_size=args.batch_size, shuffle=True)
 
 # # val_dataset = Scan2CAD(data_frame,split='validation',transform=transform, device=args.device)
 # # print(len(val_dataset))
@@ -54,8 +54,9 @@ true_df.rename(columns={data_frame.columns[0]:'Filepath', data_frame.columns[1]:
 # test_loader = DataLoader(test_dataset,batch_size=1, shuffle=True)
 # print(len(test_dataset))
 
-true_test_dataset = Scan2CAD(true_df, split='full-test',transform=transform, device=args.device)
+true_test_dataset = Scan2CAD(true_df, split='train-tl',transform=transform, device=args.device)
 true_test_loader = DataLoader(true_test_dataset, batch_size = 1, shuffle = True)
+test_loader = true_test_loader
 #Same num_classes for all datasets
 #316 Classes
 num_cad_classes = train_dataset.get_num_classes()
