@@ -196,10 +196,9 @@ class Scan2CAD(object):
             return self.filepaths[index], data
         elif(self.split == 'train-tl'):
             data = TriangleMesh.from_obj(self.filepaths[index])
-            if(self.transform):
-                data = self.transform(data)
             cad_id = self.cad_ids[index]
             label = self.label_map[cad_id]
+
         elif(self.split == 'train'):
             data = TriangleMesh.from_obj(self.train_filepaths[index])
             cad_id = self.train_cad_ids[index]
