@@ -70,10 +70,9 @@ class Scan2CAD(object):
         self.device = device
 
         self.data_frame = data_frame
-
+        print(data_frame)
         filepaths = data_frame['Filepath']
         if(split == 'full-test'):
-            print(data_frame)
             self.filepaths = filepaths
             #Original data was trained/tested on 316 classes
             self.num_classes = 316
