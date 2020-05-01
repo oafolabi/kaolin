@@ -33,6 +33,7 @@ for scene in scenes:
         #TRYING Transfer Learning
         ply_dir = chair_dir_path + "/model_normalized.ply"
         if(os.path.exists(ply_dir)):
+            print("HEre")
             off_dir = transform_pcd(chair_dir_path, ply_dir)
             chair_id_dict[off_dir] = cad_id
         
