@@ -3,6 +3,7 @@ import pandas as pd
 import open3d as o3d
 import numpy as np
 
+#TRYING Transfer Learning
 ROOTDIR = "/global/scratch/oafolabi/data/mined_scannet_chairs/"
 
 print("------"*10)
@@ -12,7 +13,7 @@ print("------"*10)
 def transform_pcd(root_dir, ply_dir):
     print(ply_dir)
     mesh = o3d.io.read_triangle_mesh(ply_dir)
-    off_dir = root_dir + "/mesh_model.obj"
+    off_dir = root_dir + "/mesh_model_normalized.obj"
     o3d.io.write_triangle_mesh(off_dir, mesh)
     return off_dir
 
@@ -28,8 +29,8 @@ for scene in scenes:
         chair_dir_contents = os.listdir(chair_dir_path)
         cad_id_file = open(chair_dir_path + "/id_cad.txt", "r")
         cad_id = cad_id_file.readline()
-
-        ply_dir = chair_dir_path + "/cropped_mesh.ply"
+        #TRYING Transfer Learning
+        ply_dir = chair_dir_path + "/model_normalized.ply"
         if(os.path.exists(ply_dir)):
             off_dir = transform_pcd(chair_dir_path, ply_dir)
             chair_id_dict[off_dir] = cad_id
@@ -37,7 +38,7 @@ for scene in scenes:
 
 data = pd.DataFrame.from_dict(chair_id_dict, orient='index')
 print(data)
-data_dir = ROOTDIR + "data.csv"
+data_dir = ROOTDIR + "data_tl.csv"
 data.to_csv(path_or_buf=data_dir)
 print("------"*10)
 print("Done! \n Data can be found at: " + data_dir)
