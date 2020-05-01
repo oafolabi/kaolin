@@ -166,7 +166,7 @@ class Scan2CAD(object):
 
     def __len__(self):
         if(self.split == 'full-test' or self.split == 'train-tl'):
-            len(self.filepaths)
+            return len(self.filepaths)
 
         elif(self.split == 'train'):
             return len(self.train_cad_ids)

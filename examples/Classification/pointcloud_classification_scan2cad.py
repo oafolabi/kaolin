@@ -43,8 +43,6 @@ true_df.rename(columns={data_frame.columns[0]:'Filepath', data_frame.columns[1]:
 
 train_dataset = Scan2CAD(data_frame,split='train-tl',transform=transform, device=args.device)
 print(train_dataset.get_num_classes())
-print(data_frame)
-print(true_df)
 train_loader = DataLoader(train_dataset,batch_size=args.batch_size, shuffle=True)
 
 # # val_dataset = Scan2CAD(data_frame,split='validation',transform=transform, device=args.device)
