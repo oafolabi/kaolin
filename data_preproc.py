@@ -4,7 +4,7 @@ import open3d as o3d
 import numpy as np
 
 #TRYING Transfer Learning
-ROOTDIR = "/global/scratch/oafolabi/data/mined_scannet_chairs/"
+ROOTDIR = "/global/scratch/akashgokul/mined_scannet_chairs/"
 
 print("------"*10)
 print("This code generates a csv file containing the directory of each off file and it's CAD id")
