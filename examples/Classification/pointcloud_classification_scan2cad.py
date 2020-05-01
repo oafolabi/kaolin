@@ -39,7 +39,7 @@ data_path_true = '/global/scratch/oafolabi/data/mined_scannet_chairs/data.csv'
 data_frame = pd.read_csv(data_path)
 true_df = pd.read_csv(data_path_true)
 data_frame.rename(columns={data_frame.columns[0]:'Filepath', data_frame.columns[1]:'ID'}, inplace=True)
-true_df.rename(columns={data_frame.columns[0]:'Filepath', data_frame.columns[1]:'ID'}, inplace=True)
+true_df.rename(columns={true_df.columns[0]:'Filepath', true_df.columns[1]:'ID'}, inplace=True)
 
 train_dataset = Scan2CAD(data_frame,split='train-tl',transform=transform, device=args.device)
 print(train_dataset.get_num_classes())
