@@ -82,7 +82,7 @@ class Scan2CAD(object):
             self.filepaths = filepaths
             self.cad_ids = data_frame['ID']
             self.num_classes = self.cad_ids.nunique()
-            self.unique_labels = cad_ids.unique()
+            self.unique_labels = self.cad_ids.unique()
 
             #Creates map to take CAD ID strings to numbers for prediction
             self.label_map = {self.unique_labels[i] : i for i in range(len(self.unique_labels))}
