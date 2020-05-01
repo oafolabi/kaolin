@@ -22,6 +22,8 @@ number_of_chair_cad_models = 236778 #from shapenet
 scenes = os.listdir(ROOTDIR)
 for scene in scenes:
     i += 1
+    if(scene == 'data.csv'):
+        continue
     print("Processing Scene: " + str(i) + " / " + str(len(scenes)))
     for chair_dir in os.listdir(ROOTDIR + "/" + scene):
         chair_dir_path = ROOTDIR + scene + "/" + chair_dir
