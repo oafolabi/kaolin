@@ -23,9 +23,9 @@
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=akashgokul@berkeley.edu
 ## Command(s) to run (example):
-echo "12 bz 15 ep "
-echo "Run number merge_4"
+echo "128 bz 100 ep "
+echo "Run number inv_tf2"
 module load python
 module load cuda/10.1
 source activate /global/scratch/akashgokul/kaolin_run
-python3 pointcloud_classification_scan2cad.py --epochs 15 --run_number transf1 --batch-size 128
+python3 pointcloud_classification_scan2cad.py --epochs 100 --run_number transf2 --batch-size 128
