@@ -1,6 +1,6 @@
 #!/bin/bash
 # Job name:
-#SBATCH --job-name=scan2cad_apr_29_2020
+#SBATCH --job-name=scan2cad_transf_may3
 #
 # Account:
 #SBATCH --account=fc_vivelab
@@ -23,9 +23,9 @@
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=akashgokul@berkeley.edu
 ## Command(s) to run (example):
-echo "12 bz 1000 ep "
+echo "12 bz 15 ep "
 echo "Run number merge_4"
 module load python
 module load cuda/10.1
 source activate /global/scratch/akashgokul/kaolin_run
-python3 pointcloud_classification_scan2cad.py --epochs 15 --run_number TL1 --batch-size 128
+python3 pointcloud_classification_scan2cad.py --epochs 15 --run_number transf1 --batch-size 128
