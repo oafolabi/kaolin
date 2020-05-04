@@ -49,7 +49,7 @@ def get_predictions(args):
     print("Getting Predictions")
 
     pred_id_map = pd.read_csv('inv_trans_runs/pred_label_map.csv')
-    data_frame.rename(columns={data_frame.columns[0]:'Label', data_frame.columns[1]:'ID'}, inplace=True)
+    pred_id_map.rename(columns={pred_id_map.columns[0]:'Label', pred_id_map.columns[1]:'ID'}, inplace=True)
     # pred_id_map = pred_id_map.to_dict()
     print(pred_id_map)
 
@@ -66,7 +66,7 @@ def get_predictions(args):
 
         
     final_predictions_df = pd.DataFrame.from_dict(test_predictions, orient='index')
-    final_predictions_df.rename(columns={data_frame.columns[0]:'Filepath', data_frame.columns[1]:'Predicted ID'}, inplace=True)
+    final_predictions_df.rename(columns={final_predictions_df.columns[0]:'Filepath', final_predictions_df.columns[1]:'Predicted ID'}, inplace=True)
     print(final_predictions_df)
     final_predictions_df.to_csv(path_or_buf='predictions.csv')
 
