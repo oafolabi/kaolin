@@ -65,7 +65,7 @@ if torch.cuda.device_count() > 1:
 else:
     model.to(args.device)
 
-    
+
 optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 criterion = torch.nn.CrossEntropyLoss()
 
@@ -103,7 +103,7 @@ for e in range(args.epochs):
     train_loss_e = train_loss / num_batches
     train_acc = train_accuracy / num_batches
     print('Train loss:', train_loss_e)
-    print('Train accuracy:', train_acc)
+    print('Train accuracy:', 100 * train_acc)
 
     train_loss_lst.append(train_loss_e)
     train_acc_lst.append(train_acc)
@@ -128,8 +128,8 @@ for e in range(args.epochs):
 
     val_loss_e = val_loss / num_batches
     val_acc = val_accuracy / num_batches
-    print('Val loss:', 100 * val_loss_e)
-    print('Val accuracy:', val_acc)
+    print('Val loss:', val_loss_e)
+    print('Val accuracy:', 100 * val_acc)
 
     val_loss_lst.append(val_loss_e)
     val_acc_lst.append(val_acc)
@@ -148,11 +148,11 @@ for e in range(args.epochs):
             test_accuracy += torch.mean((pred_label == batch[1].view(-1)).float()).cpu().item()
             num_batches += 1
 
-    test_acc = 100 * test_accuracy / num_batches
+    test_acc = test_accuracy / num_batches
 
     print("-------\n"*2)
-    print('Test accuracy:', test_acc)
-    if(test_acc * 100 >= 80):
+    print('Test accuracy:', 100 * test_acc)
+    if(100 * test_acc >= 80):
         # np.save('train_acc_' + args.run_number, np.array(train_acc_lst))
         # np.save('train_loss_' + args.run_number, np.array(train_loss_lst))
         # np.save('val_acc_' + args.run_number, np.array(val_acc_lst))
