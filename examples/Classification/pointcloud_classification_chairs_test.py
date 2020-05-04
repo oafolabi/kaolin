@@ -49,7 +49,7 @@ def get_predictions(args):
     print("Getting Predictions")
 
     pred_id_map = pd.read_csv('inv_trans_runs/pred_label_map.csv')
-    pred_id_map = pred_id_map.to_dict()
+    # pred_id_map = pred_id_map.to_dict()
     print(pred_id_map[0])
 
     #assuming test-batch 1
