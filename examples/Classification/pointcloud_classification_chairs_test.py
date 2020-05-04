@@ -52,7 +52,7 @@ def get_predictions(args):
     pred_id_map.rename(columns={pred_id_map.columns[0]:'Label', pred_id_map.columns[1]:'ID'}, inplace=True)
     # pred_id_map = pred_id_map.to_dict()
     print(pred_id_map)
-    print(pred_id_map['Label'][0])
+    print(pred_id_map['ID'][0])
 
     #assuming test-batch 1
     with torch.no_grad():
