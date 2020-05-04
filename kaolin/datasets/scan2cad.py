@@ -37,9 +37,7 @@ class Scan2CAD(object):
             -This should be the ABSOLUTE Filepath of each .off file 
             -Note objects should be .off
 
-        split (str, optional): Split to load ('train' vs validation
-                                                vs 'train-tl' vs 'test' vs 'full-test' 
-                                                (for full load of data),
+        split (str, optional): Split to load ('train' vs validation vs 'test' vs 'full-test' (for full load of data),
             default: 'train').
             Note: Full-test should be used for data with NO LABELS
         
@@ -60,15 +58,14 @@ class Scan2CAD(object):
     def __init__(self, data_frame: pd.DataFrame,
                  split: Optional[str] = 'train',
                  transform: Optional[Callable] = None,
-                 device: Optional[Union[torch.device, str]] = 'cpu',
-                 save = True):
+                 device: Optional[Union[torch.device, str]] = 'cpu'):
 
         #To ensure same split every time
         np.random.seed(42)
 
         split = split.lower()
         #Combing train and validation due to limited samples
-        assert split in ['train','train-tl', 'validation','test', 'full-test']
+        assert split in ['train', 'validation','test', 'full-test']
 
         self.split = split
         self.transform = transform
@@ -80,25 +77,6 @@ class Scan2CAD(object):
             self.filepaths = filepaths
             #Original data was trained/tested on 316 classes
             self.num_classes = 316
-        elif(split == 'train-tl'):
-            self.filepaths = filepaths
-            self.cad_ids = data_frame['ID']
-            self.num_classes = self.cad_ids.nunique()
-            self.unique_labels = self.cad_ids.unique()
-
-            #Creates map to take CAD ID strings to numbers for prediction
-            self.label_map = {self.unique_labels[i] : i for i in range(len(self.unique_labels))}
-
-            #Creates inverse map to take predictions -> CAD ID strings
-            self.pred_label_map = {}
-            for cad_id in self.label_map.keys():
-                pred = self.label_map[cad_id]
-                self.pred_label_map[pred] = cad_id
-            
-            #Saves mapping for full-test scenario
-            if(save):
-                pred_label_df = pd.DataFrame.from_dict(self.pred_label_map, orient='index')
-                pred_label_df.to_csv(path_or_buf='pred_label_map.csv')
 
         else:
             cad_ids = data_frame['ID']
@@ -167,7 +145,7 @@ class Scan2CAD(object):
 
 
     def __len__(self):
-        if(self.split == 'full-test' or self.split == 'train-tl'):
+        if(self.split == 'full-test'):
             return len(self.filepaths)
         elif(self.split == 'train'):
             return len(self.train_cad_ids)
@@ -197,10 +175,6 @@ class Scan2CAD(object):
             
             #Returning filepath for book-keeping purposes
             return self.filepaths[index], data
-        elif(self.split == 'train-tl'):
-            data = TriangleMesh.from_obj(self.filepaths[index])
-            cad_id = self.cad_ids[index]
-            label = self.label_map[cad_id]
 
         elif(self.split == 'train'):
             data = TriangleMesh.from_obj(self.train_filepaths[index])

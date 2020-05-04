@@ -34,14 +34,11 @@ transform = tfs.Compose([
     tfs.NormalizePointCloud()
 ])
 
-# data_path = "/global/scratch/akashgokul/mined_scannet_chairs/data.csv"
 data_path = '/global/scratch/oafolabi/data/mined_scannet_chairs/data.csv'
 data_frame = pd.read_csv(data_path)
-# true_df = pd.read_csv(data_path_true)
 data_frame.rename(columns={data_frame.columns[0]:'Filepath', data_frame.columns[1]:'ID'}, inplace=True)
-#true_df.rename(columns={true_df.columns[0]:'Filepath', true_df.columns[1]:'ID'}, inplace=True)
 
-train_dataset = Scan2CAD(data_frame,split='train-tl',transform=transform, device=args.device)
+train_dataset = Scan2CAD(data_frame,split='train',transform=transform, device=args.device)
 print(train_dataset.get_num_classes())
 train_loader = DataLoader(train_dataset,batch_size=args.batch_size, shuffle=True)
 
@@ -58,14 +55,17 @@ print(len(test_dataset))
 # test_loader = true_test_loader
 #Same num_classes for all datasets
 #316 Classes
+
 num_cad_classes = train_dataset.get_num_classes()
 model = PointNetClassifier(num_classes=num_cad_classes)
 if torch.cuda.device_count() > 1:
   print("Let's use", torch.cuda.device_count(), "GPUs!")
   # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
-  model = nn.DataParallel(model)
+  model = torch.nn.DataParallel(model)
 else:
     model.to(args.device)
+
+    
 optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate)
 criterion = torch.nn.CrossEntropyLoss()
 
@@ -128,7 +128,7 @@ for e in range(args.epochs):
 
     val_loss_e = val_loss / num_batches
     val_acc = val_accuracy / num_batches
-    print('Val loss:', val_loss_e)
+    print('Val loss:', 100 * val_loss_e)
     print('Val accuracy:', val_acc)
 
     val_loss_lst.append(val_loss_e)
