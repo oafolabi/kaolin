@@ -52,8 +52,6 @@ def get_predictions(args):
     pred_id_map.rename(columns={pred_id_map.columns[0]:'Label', pred_id_map.columns[1]:'ID'}, inplace=True)
     pred_id_map = pred_id_map.sort_values(by=['Label'])
     # pred_id_map = pred_id_map.to_dict()
-    print(pred_id_map)
-    print(pred_id_map['ID'][0])
 
     #assuming test-batch 1
     with torch.no_grad():
@@ -61,10 +59,7 @@ def get_predictions(args):
             data = data.to(args.device)
             pred = model(data)
             pred_labels = torch.argmax(pred, dim=1)
-            print(type(filepath))
-            print(filepath[0])
-            print(pred_labels.int().item())
-            test_predictions[filepath[0]] = pred_id_map[pred_labels.int().item()]
+            test_predictions[filepath[0]] = pred_id_map['Label'][pred_labels.int().item()]
 
         
     final_predictions_df = pd.DataFrame.from_dict(test_predictions, orient='index')
