@@ -37,7 +37,9 @@ class Scan2CAD(object):
             -This should be the ABSOLUTE Filepath of each .off file 
             -Note objects should be .off
 
-        split (str, optional): Split to load ('train' vs 'train-tl' vs 'test' vs 'full-test' (for full load of data),
+        split (str, optional): Split to load ('train' vs validation
+                                                vs 'train-tl' vs 'test' vs 'full-test' 
+                                                (for full load of data),
             default: 'train').
             Note: Full-test should be used for data with NO LABELS
         
@@ -66,7 +68,7 @@ class Scan2CAD(object):
 
         split = split.lower()
         #Combing train and validation due to limited samples
-        assert split in ['train','train-tl','test', 'full-test']
+        assert split in ['train','train-tl', 'validation','test', 'full-test']
 
         self.split = split
         self.transform = transform
@@ -138,8 +140,8 @@ class Scan2CAD(object):
                                                     replace = False ).tolist()
 
             
-            train_sample_indices = shuffled_indices[0:num_train_samples + num_val_samples]
-            #val_indices = shuffled_indices[num_train_samples : num_train_samples + num_val_samples]
+            train_sample_indices = shuffled_indices[0:num_train_samples]
+            val_indices = shuffled_indices[num_train_samples : num_train_samples + num_val_samples]
             test_indices = shuffled_indices[len(rest_of_data_frame)-num_test_samples:]
 
             #creates train and validation set
@@ -148,10 +150,10 @@ class Scan2CAD(object):
             self.train_filepaths =  self.train_data_frame['Filepath']
             self.train_cad_ids = self.train_data_frame['ID']
 
-            # self.validation_data_frame = rest_of_data_frame.iloc[val_indices]
-            # self.validation_data_frame.reset_index(inplace=True)
-            # self.validation_filepaths =  self.validation_data_frame['Filepath']
-            # self.validation_cad_ids = self.validation_data_frame['ID']
+            self.validation_data_frame = rest_of_data_frame.iloc[val_indices]
+            self.validation_data_frame.reset_index(inplace=True)
+            self.validation_filepaths =  self.validation_data_frame['Filepath']
+            self.validation_cad_ids = self.validation_data_frame['ID']
             
             self.test_data_frame = rest_of_data_frame.iloc[test_indices]
             self.test_data_frame.reset_index(inplace=True)
@@ -159,7 +161,7 @@ class Scan2CAD(object):
             self.test_cad_ids = self.test_data_frame['ID']
 
             train_indices_lst = self.train_data_frame.index.tolist()
-            # val_indices_lst = self.validation_data_frame.index.tolist()
+            val_indices_lst = self.validation_data_frame.index.tolist()
             test_indices_lst = self.test_data_frame.index.tolist()
 
 
@@ -167,9 +169,10 @@ class Scan2CAD(object):
     def __len__(self):
         if(self.split == 'full-test' or self.split == 'train-tl'):
             return len(self.filepaths)
-
         elif(self.split == 'train'):
             return len(self.train_cad_ids)
+        elif(self.split == 'validation'):
+            return len(self.validation_cad_ids)
         else:
             return len(self.test_cad_ids)
     
@@ -204,6 +207,10 @@ class Scan2CAD(object):
             cad_id = self.train_cad_ids[index]
             label = self.label_map[cad_id]
         
+        elif(self.split == 'validation'):
+            data = TriangleMesh.from_obj(self.validation_filepaths[index])
+            cad_id = self.validation_cad_ids[index]
+            label = self.label_map[cad_id]
         
         elif(self.split == 'test'):
             data = TriangleMesh.from_obj(self.test_filepaths[index])

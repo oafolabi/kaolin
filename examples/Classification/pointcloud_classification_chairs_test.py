@@ -48,9 +48,6 @@ def get_predictions(args):
     pred_id_map = pred_id_map.to_dict()
     print(pred_id_map)
 
-    #TODO: ENSURE MAPS ARE CORRECT
-    assert 3==2
-
     #assuming test-batch 1
     with torch.no_grad():
         for idx, filepath, data in enumerate(tqdm(dataloader)):
@@ -62,7 +59,6 @@ def get_predictions(args):
     final_predictions_df = pd.DataFrame.from_dict(test_predictions, orient='index')
     final_predictions_df.rename(columns={data_frame.columns[0]:'Filepath', data_frame.columns[1]:'Predicted ID'}, inplace=True)
     print(final_predictions_df)
-    #TODO: ENSURE PREDICTIONS ARE WORKING
     final_predictions_df.to_csv(path_or_buf='predictions.csv')
 
     print("Testing Completed")
