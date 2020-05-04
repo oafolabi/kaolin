@@ -36,7 +36,7 @@ def get_predictions(args):
 
     # From original data there are 316 classes
     model = PointNetClassifier(num_classes=dataset.num_classes).to(args.device)
-    model.load_state_dict(torch.load('pointnet_model_state_dict.pt'))
+    model.load_state_dict(torch.load('inv_trans_runs/pointnet_model_state_dict.pt'))
 
     model.eval()
 
@@ -44,7 +44,7 @@ def get_predictions(args):
 
     print("Getting Predictions")
 
-    pred_id_map = pd.read_csv('pred_label_map.csv')
+    pred_id_map = pd.read_csv('inv_trans_runs/pred_label_map.csv')
     pred_id_map = pred_id_map.to_dict()
     print(pred_id_map)
 
