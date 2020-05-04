@@ -63,8 +63,6 @@ def get_predictions(args):
 
         
     final_predictions_df = pd.DataFrame.from_dict(test_predictions, orient='index')
-    #final_predictions_df.rename(columns={final_predictions_df.columns[0]:'Filepath', final_predictions_df.columns[1]:'Predicted ID'}, inplace=True)
-    print(final_predictions_df)
     final_predictions_df.to_csv(path_or_buf='predictions.csv')
 
     print("Testing Completed")
