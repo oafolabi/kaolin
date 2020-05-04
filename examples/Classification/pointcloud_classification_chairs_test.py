@@ -50,6 +50,7 @@ def get_predictions(args):
 
     pred_id_map = pd.read_csv('inv_trans_runs/pred_label_map.csv')
     pred_id_map.rename(columns={pred_id_map.columns[0]:'Label', pred_id_map.columns[1]:'ID'}, inplace=True)
+    pred_id_map = pred_id_map.sort_values(by=['Label'])
     # pred_id_map = pred_id_map.to_dict()
     print(pred_id_map)
     print(pred_id_map['ID'][0])
