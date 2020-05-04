@@ -58,7 +58,7 @@ def get_predictions(args):
             data = data.to(args.device)
             pred = model(data)
             pred_labels = torch.argmax(pred, dim=1)
-            print(type(filepath.item()))
+            print(type(filepath))
             print(type(pred_labels.item()))
             test_predictions[filepath.item()] = pred_id_map[pred_labels.item().int()]
 
