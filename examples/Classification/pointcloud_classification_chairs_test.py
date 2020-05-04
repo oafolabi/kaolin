@@ -33,10 +33,14 @@ def get_predictions(args):
     dataset = Scan2CAD(data_frame, split='full-test', transform=transform, device = args.device)
     dataloader = DataLoader(dataset, batch_size = 1, shuffle = False)
 
-
+    print("Loading Full Model.... \n")
+    model_full = torch.load('inv_trans_runs/pointnet_model.pt')
+    print("Full Model Loaded! \n")
     # From original data there are 316 classes
+    print("Loading Model Dict..... \n")
     model = PointNetClassifier(num_classes=dataset.num_classes).to(args.device)
     model.load_state_dict(torch.load('inv_trans_runs/pointnet_model_state_dict.pt'))
+    print("MODEL DICT LOADED! \n")
 
     model.eval()
 
