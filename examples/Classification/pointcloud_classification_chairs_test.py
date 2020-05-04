@@ -54,7 +54,7 @@ def get_predictions(args):
 
     #assuming test-batch 1
     with torch.no_grad():
-        for idx, filepath, data in enumerate(tqdm(dataloader)):
+        for idx, (filepath, data) in enumerate(tqdm(dataloader)):
             pred = model(data)
             pred_labels = torch.argmax(pred, dim=1)
             test_predictions[filepath] = pred_id_map[pred_labels[0].int()]
