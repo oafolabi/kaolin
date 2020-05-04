@@ -55,9 +55,12 @@ def get_predictions(args):
     #assuming test-batch 1
     with torch.no_grad():
         for idx, (filepath, data) in enumerate(tqdm(dataloader)):
+            data = data.to(args.device)
             pred = model(data)
             pred_labels = torch.argmax(pred, dim=1)
-            test_predictions[filepath] = pred_id_map[pred_labels[0].int()]
+            print(filepath[0])
+            print(pred_labels[0])
+            test_predictions[filepath[0]] = pred_id_map[pred_labels[0].int()]
 
         
     final_predictions_df = pd.DataFrame.from_dict(test_predictions, orient='index')
