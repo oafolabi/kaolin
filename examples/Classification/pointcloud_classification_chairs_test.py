@@ -58,9 +58,9 @@ def get_predictions(args):
             data = data.to(args.device)
             pred = model(data)
             pred_labels = torch.argmax(pred, dim=1)
-            print(filepath[0])
-            print(pred_labels[0])
-            test_predictions[filepath[0]] = pred_id_map[pred_labels[0].int()]
+            print(type(filepath.item()))
+            print(type(pred_labels.item()))
+            test_predictions[filepath.item()] = pred_id_map[pred_labels.item().int()]
 
         
     final_predictions_df = pd.DataFrame.from_dict(test_predictions, orient='index')
