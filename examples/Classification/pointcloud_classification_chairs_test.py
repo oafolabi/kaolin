@@ -49,6 +49,7 @@ def get_predictions(args):
     print("Getting Predictions")
 
     pred_id_map = pd.read_csv('inv_trans_runs/pred_label_map.csv')
+    data_frame.rename(columns={data_frame.columns[0]:'Label', data_frame.columns[1]:'ID'}, inplace=True)
     # pred_id_map = pred_id_map.to_dict()
     print(pred_id_map)
 
