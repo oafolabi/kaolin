@@ -110,7 +110,7 @@ class Scan2CAD(object):
             train_frac = 0.6 - (len(data_frame) - len(rest_of_data_frame))/ len(data_frame)
 
             num_train_samples = math.floor(train_frac * len(rest_of_data_frame))
-            num_val_samples = math.floor(0.2*len(rest_of_data_frame))
+            num_val_samples = math.floor(0.3*len(rest_of_data_frame))
             num_test_samples = len(rest_of_data_frame) - (num_train_samples + num_val_samples)
 
             shuffled_indices = np.random.choice(range(0,len(rest_of_data_frame)),
