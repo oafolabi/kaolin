@@ -28,4 +28,4 @@ echo "Run number inv_tf4_more_data"
 module load python
 # module load cuda/10.1
 source activate /global/scratch/akashgokul/kaolin_run
-python3 pointcloud_classification_scan2cad.py --epochs 100 --run_number transf4_128 --batch-size 128
+python3 pointcloud_classification_scan2cad.py --epochs 100 --run_number transf4_64 --batch-size 64
