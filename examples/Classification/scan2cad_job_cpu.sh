@@ -24,8 +24,8 @@
 #SBATCH --mail-user=akashgokul@berkeley.edu
 ## Command(s) to run (example):
 echo "256 bz 100 ep "
-echo "Run number inv_tf4"
+echo "Run number inv_tf4_more_data"
 module load python
 module load cuda/10.1
 source activate /global/scratch/akashgokul/kaolin_run
-python3 pointcloud_classification_scan2cad.py --epochs 100 --run_number transf4 --batch-size 256
+python3 pointcloud_classification_scan2cad.py --epochs 100 --run_number transf4_moredata --batch-size 256
