@@ -155,6 +155,7 @@ for e in range(args.epochs):
     print("-------\n"*2)
     print('Test accuracy:', 100 * test_acc)
     if(100 * test_acc >= 85):
+        print("Hallelujah")
         # np.save('train_acc_' + args.run_number, np.array(train_acc_lst))
         # np.save('train_loss_' + args.run_number, np.array(train_loss_lst))
         # np.save('val_acc_' + args.run_number, np.array(val_acc_lst))
