@@ -30,12 +30,12 @@ def get_predictions(args):
     data_frame.rename(columns={data_frame.columns[0]:'Filepath', data_frame.columns[1]:'ID'}, inplace=True)
 
     #Instantiates dataset and dataloader for the data from the csv file
-    dataset = Scan2CAD(data_frame, split='test', transform=transform, device = args.device)
+    dataset = Scan2CAD(data_frame, split='full-test', transform=transform, device = args.device)
     dataloader = DataLoader(dataset, batch_size = 1, shuffle = False)
 
-    # print("Loading Full Model.... \n")
-    # model_full = torch.load('inv_trans_runs/pointnet_model_transf2.pt')
-    # print("Full Model Loaded! \n")
+    print("Loading Full Model.... \n")
+    model_full = torch.load('inv_trans_runs/pointnet_model_transf2.pt')
+    print("Full Model Loaded! \n")
     # From original data there are 316 classes
     print("Loading Model Dict..... \n")
     model = PointNetClassifier(num_classes=dataset.num_classes).to(args.device)
@@ -54,19 +54,18 @@ def get_predictions(args):
     # pred_id_map = pred_id_map.to_dict()
 
     #assuming test-batch 1
-    test_accuracy = 0.0
-    num_batches = 0
     with torch.no_grad():
-        for idx, batch in enumerate(tqdm(dataloader)):
-            num_batches += 1
-            pred = model(batch[0])
-            pred_label = torch.argmax(pred, dim=1)
-            test_accuracy += torch.mean((pred_label == batch[1].view(-1)).float()).cpu().item()
-            # test_predictions[filepath[0]] = pred_id_map['Label'][pred_labels.int().item()]
-    test_accuracy = test_accuracy / num_batches
-    print(test_accuracy * 100)
-    # final_predictions_df = pd.DataFrame.from_dict(test_predictions, orient='index')
-    # final_predictions_df.to_csv(path_or_buf='predictions.csv')
+        for idx, (filepath, data) in enumerate(tqdm(dataloader)):
+            data = data.to(args.device)
+            pred = model(data)
+            pred_labels = torch.argmax(pred, dim=1)
+            test_predictions[filepath[0]] = pred_id_map['Label'][pred_labels.int().item()]
+
+        
+    final_predictions_df = pd.DataFrame.from_dict(test_predictions, orient='index')
+    #final_predictions_df.rename(columns={final_predictions_df.columns[0]:'Filepath', final_predictions_df.columns[1]:'Predicted ID'}, inplace=True)
+    print(final_predictions_df)
+    final_predictions_df.to_csv(path_or_buf='predictions.csv')
 
     print("Testing Completed")
     print("Predictions saved in this directory. Look for predictions.csv")

@@ -137,7 +137,7 @@ for e in range(args.epochs):
     val_acc_lst.append(val_acc)
     
 
-    test_accuracy = val_acc 
+    test_accuracy = 0.0 
     num_batches = 0
 
     with torch.no_grad():
