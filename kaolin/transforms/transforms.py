@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     http://www.apache.oandg/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,7 +18,9 @@ import hashlib
 
 import scipy
 import numpy as np
+import math
 import torch
+import pdb
 
 from kaolin.rep.PointCloud import PointCloud
 from kaolin.rep.VoxelGrid import VoxelGrid
@@ -34,6 +36,36 @@ import kaolin.conversions as cvt
 from kaolin.transforms import pointcloudfunc as pcfunc
 from kaolin.transforms import meshfunc
 from kaolin.transforms import voxelfunc
+
+
+# A little helper function
+def get_random_point_in_sphere(size, project=False):
+    scale = np.random.uniform(size=(size[0], 1))
+    point = np.random.normal(size=size)
+    point = np.asarray(point, dtype=np.float32)
+
+    point = point / np.linalg.norm(point, axis=1).reshape((-1, 1))
+
+    if not project:
+        point = scale * point
+
+    return point
+
+
+def rotation_matrix(axis, theta):
+    """
+    Return the rotation matrix associated with counterclockwise rotation about
+    the given axis by theta radians.
+    """
+    axis = np.asarray(axis)
+    axis = axis / math.sqrt(np.dot(axis, axis))
+    a = math.cos(theta / 2.0)
+    b, c, d = -axis * math.sin(theta / 2.0)
+    aa, bb, cc, dd = a * a, b * b, c * c, d * d
+    bc, ad, ac, ab, bd, cd = b * c, a * d, a * c, a * b, b * d, c * d
+    return np.array([[aa + bb - cc - dd, 2 * (bc + ad), 2 * (bd - ac)],
+                     [2 * (bc - ad), aa + cc - bb - dd, 2 * (cd + ab)],
+                     [2 * (bd + ac), 2 * (cd - ab), aa + dd - bb - cc]])
 
 
 class Compose(object):
@@ -226,6 +258,66 @@ class RotatePointCloud(object):
         return self.__class__.__name__ + '(rotmat={0})'.format(self.rotmat)
 
 
+class RandomRotatePointCloud(object):
+    r"""Rotate a pointcloud with a given rotation matrix.
+    Given a :math:`3 \times 3` rotation matrix, this transform will rotate each
+    point in the cloud by the rotation matrix specified.
+
+    Args:
+        rotmat (torch.Tensor): Rotation matrix that specifies the rotation to
+            be applied to the pointcloud (shape: :math:`3 \times 3`).
+        inplace (bool, optional): Bool to make this operation in-place.
+
+    TODO: Example.
+
+    """
+
+    def __init__(self, inplace: Optional[bool] = True):
+        self.inplace = inplace
+        self.rotmat = torch.eye(3)
+
+    def __call__(self, cloud: Union[torch.Tensor, PointCloud]):
+        """
+        Args:
+            cloud (torch.Tensor or PointCloud): Input pointcloud to be rotated.
+
+        Returns:
+            (torch.Tensor or PointCloud): Rotated pointcloud.
+        """
+        # random_axis = np.squeeze(get_random_point_in_sphere(size=(1, 3), project=True)).tolist()
+        random_axis = [0.0, 1.0, 0.0]
+        theta_range = (180 * np.pi )/ 180
+        random_theta = np.random.uniform(low=-1 * theta_range, high=theta_range)
+        np_rotmat = rotation_matrix(random_axis, random_theta)
+        np_rotmat = np_rotmat.astype(np.float32)
+        # pdb.set_trace()
+        self.rotmat = torch.from_numpy(np_rotmat).to(cloud.device)
+
+        return pcfunc.rotate(cloud, rotmat=self.rotmat, inplace=self.inplace)
+
+    def __repr__(self):
+        return self.__class__.__name__ + '(rotmat={0})'.format(self.rotmat)
+
+
+class JitterPointCloud(object):
+    def __init__(self, inplace: Optional[bool] = True):
+        self.inplace = inplace
+
+    def __call__(self, cloud: Union[torch.Tensor, PointCloud]):
+        """
+        Args:
+            cloud (torch.Tensor or PointCloud): Input pointcloud to be rotated.
+
+        Returns:
+            (torch.Tensor or PointCloud): Rotated pointcloud.
+        """
+
+        return pcfunc.jitter_point_cloud(cloud, inplace=self.inplace)
+
+    def __repr__(self):
+        return self.__class__.__name__
+
+
 class RealignPointCloud(object):
     r"""Re-align a `src` pointcloud such that it fits in an axis-aligned
     bounding box whose size matches the `tgt` pointcloud.
@@ -381,7 +473,7 @@ class ThresholdVoxelGrid(object):
             (torch.Tensor): Thresholded voxel array.
         """
         return cvt.threshold(voxgrid, thresh=self.thresh,
-            inplace=self.inplace)
+                             inplace=self.inplace)
 
     def __repr__(self):
         return self.__class__.__name__ + '(threshold={0})'.format(self.thresh)
@@ -708,7 +800,7 @@ class TriangleMeshToVoxelGrid(object):
         return voxels
 
     def __repr__(self):
-        return self.__class__.__name__ + '(resolution={0}, normalize={1}, vertex_offset={2})'.\
+        return self.__class__.__name__ + '(resolution={0}, normalize={1}, vertex_offset={2})'. \
             format(self.resolution, self.normalize, self.vertex_offset)
 
 
@@ -742,7 +834,7 @@ class TriangleMeshToSDF(object):
         return sdf(self.noise * (torch.rand(self.num_samples, 3).to(mesh.device) - .5))
 
     def __repr__(self):
-        return self.__class__.__name__ + '(num_samples={0}, noise={1})'.\
+        return self.__class__.__name__ + '(num_samples={0}, noise={1})'. \
             format(self.num_samples, self.noise)
 
 
@@ -834,7 +926,7 @@ class SDFToTriangleMesh(object):
             (TriangleMesh): Computed triangle mesh.
         """
         verts, faces = cvt.sdf_to_trianglemesh(sdf, self.bbox_center, self.bbox_dim,
-                                       self.resolution, self.upsampling_steps)
+                                               self.resolution, self.upsampling_steps)
         return TriangleMesh.from_tensors(vertices=verts, faces=faces)
 
     def __repr__(self):
@@ -876,7 +968,7 @@ class SDFToPointCloud(object):
             (torch.FloatTensor): Computed point cloud.
         """
         return cvt.sdf_to_pointcloud(sdf, self.bbox_center, self.bbox_dim, self.resolution,
-                                self.upsampling_steps, self.num_points)
+                                     self.upsampling_steps, self.num_points)
 
     def __repr__(self):
         format_string = self.__class__.__name__ + '(bbox_center={0}'.format(self.bbox_center)
@@ -917,7 +1009,7 @@ class SDFToVoxelGrid(object):
             (torch.FloatTensor): Computed point cloud.
         """
         return cvt.sdf_to_voxelgrid(sdf, self.bbox_center, self.bbox_dim, self.resolution,
-                            self.upsampling_steps, self.num_points)
+                                    self.upsampling_steps, self.num_points)
 
     def __repr__(self):
         format_string = self.__class__.__name__ + '(bbox_center={0}'.format(self.bbox_center)
@@ -937,6 +1029,7 @@ class VoxelGridToTriangleMesh(object):
             -'marching_cubes': marching cubes is applied to passed voxel
         normalize (bool): whether to scale the array to (-.5,.5)
     """
+
     def __init__(self, threshold, mode, normalize):
         self.thresh = threshold
         self.mode = mode
@@ -954,7 +1047,7 @@ class VoxelGridToTriangleMesh(object):
         return TriangleMesh.from_tensors(vertices=verts, faces=faces)
 
     def __repr__(self):
-        return self.__class__.__name__ + '(threshold={0}, mode={1}, normalize={2})'.\
+        return self.__class__.__name__ + '(threshold={0}, mode={1}, normalize={2})'. \
             format(self.thresh, self.mode, self.normalize)
 
 
@@ -965,6 +1058,7 @@ class VoxelGridToQuadMesh(object):
         threshold (float): Threshold from which to make voxel binary.
         normalize (bool): Whether to scale the array to (-.5,.5).
     """
+
     def __init__(self, threshold: float, normalize: bool):
         self.thresh = threshold
         self.normalize = normalize
@@ -981,7 +1075,7 @@ class VoxelGridToQuadMesh(object):
         return QuadMesh.from_tensors(vertices=verts, faces=faces)
 
     def __repr__(self):
-        return self.__class__.__name__ + '(threshold={0}, normalize={1})'.\
+        return self.__class__.__name__ + '(threshold={0}, normalize={1})'. \
             format(self.thresh, self.normalize)
 
 
@@ -1032,6 +1126,7 @@ class VoxelGridToSDF(object):
     Returns:
         a signed distance fucntion
     """
+
     def __init__(self, threshold: float, normalize: bool):
         self.thresh = threshold
         self.normalize = normalize
@@ -1047,5 +1142,5 @@ class VoxelGridToSDF(object):
         return cvt.voxelgrid_to_sdf(voxel, self.thresh, self.normalize)
 
     def __repr__(self):
-        return self.__class__.__name__ + '(threshold={0}, normalize={1})'.\
+        return self.__class__.__name__ + '(threshold={0}, normalize={1})'. \
             format(self.thresh, self.normalize)

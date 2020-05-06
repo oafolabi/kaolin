@@ -20,9 +20,56 @@ import torch
 from kaolin.rep import PointCloud
 from kaolin import helpers
 
-
 # Tiny eps
 EPS = 1e-6
+
+
+def jitter_point_cloud(cloud: Union[torch.Tensor, PointCloud],
+                       sigma: Optional[Union[float, torch.Tensor]] = 0.01,
+                       clip: Optional[Union[float, torch.Tensor]] = 0.05,
+                       inplace: Optional[bool] = True):
+    """ Randomly jitter points. jittering is per point.
+        Input:
+          BxNx3 array, original batch of point clouds
+        Return:
+          BxNx3 array, jittered batch of point clouds
+    """
+
+    if isinstance(cloud, np.ndarray):
+        cloud = torch.from_numpy(cloud)
+
+    # if isinstance(sigma, np.ndarray):
+    #     sigma = torch.from_numpy(sigma)
+    #
+    # if isinstance(clip, np.ndarray):
+    #     clip = torch.from_numpy(clip)
+
+    if isinstance(cloud, PointCloud):
+        cloud = cloud.points
+
+    # if isinstance(sigma, float):
+    #     sigma = torch.Tensor([sigma]).to(cloud.device)
+
+    # if isinstance(clip, float):
+    #     clip = torch.Tensor([clip]).to(cloud.device)
+
+    helpers._assert_tensor(cloud)
+    # helpers._assert_tensor(sigma)
+    # helpers._assert_tensor(clip)
+    helpers._assert_dim_ge(cloud, 2)
+    # helpers._assert_gt(sigma, 0.)
+    # helpers._assert_gt(clip, 0.)
+
+    if not inplace:
+        cloud = cloud.clone()
+
+    N, C = cloud.shape
+    jittered_data = np.clip(sigma * np.random.randn(N, C), -1 * clip, clip)
+    jittered_data = jittered_data.astype(np.float32)
+    jittered_data = torch.from_numpy(jittered_data)
+    jittered_data = jittered_data.to(cloud.device)
+    cloud = cloud + jittered_data
+    return cloud
 
 
 def scale(cloud: Union[torch.Tensor, PointCloud],
@@ -202,7 +249,7 @@ def normalize(cloud: Union[torch.Tensor, PointCloud],
     if not inplace:
         cloud = cloud.clone()
 
-    cloud = (cloud - cloud.mean(-2).unsqueeze(-2))\
-        / (cloud.std(-2).unsqueeze(-2) + EPS)
+    cloud = (cloud - cloud.mean(-2).unsqueeze(-2)) \
+            / (cloud.std(-2).unsqueeze(-2) + EPS)
 
     return cloud
