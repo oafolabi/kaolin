@@ -272,9 +272,10 @@ class RandomRotatePointCloud(object):
 
     """
 
-    def __init__(self, inplace: Optional[bool] = True):
+    def __init__(self, rotation_range: Optional[float] = 180.0, inplace: Optional[bool] = True):
         self.inplace = inplace
         self.rotmat = torch.eye(3)
+        self.rotation_range = rotation_range
 
     def __call__(self, cloud: Union[torch.Tensor, PointCloud]):
         """
@@ -286,7 +287,7 @@ class RandomRotatePointCloud(object):
         """
         # random_axis = np.squeeze(get_random_point_in_sphere(size=(1, 3), project=True)).tolist()
         random_axis = [0.0, 1.0, 0.0]
-        theta_range = (180 * np.pi )/ 180
+        theta_range = (self.rotation_range * np.pi )/ 180
         random_theta = np.random.uniform(low=-1 * theta_range, high=theta_range)
         np_rotmat = rotation_matrix(random_axis, random_theta)
         np_rotmat = np_rotmat.astype(np.float32)

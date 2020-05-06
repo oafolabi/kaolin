@@ -32,7 +32,9 @@ args.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 transform = tfs.Compose([
     tfs.TriangleMeshToPointCloud(num_samples=args.num_points),
-    tfs.NormalizePointCloud()
+    tfs.NormalizePointCloud(),
+    tfs.RandomRotatePointCloud(180.0),
+    tfs.JitterPointCloud(),
 ])
 
 data_path = '/global/scratch/akashgokul/mined_scannet_chairs/data.csv'
