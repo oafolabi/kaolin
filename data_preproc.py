@@ -3,7 +3,9 @@ import pandas as pd
 import open3d as o3d
 import numpy as np
 
-ROOTDIR = "/global/scratch/oafolabi/data/mined_scannet_chairs/"
+# ROOTDIR = "/global/scratch/oafolabi/data/mined_scannet_chairs/"
+ROOTDIR = "/media/sastrygrp2/Elements/deepsdf_discriminator/mined_scannet_chairs/"
+
 
 print("------"*10)
 print("This code generates a csv file containing the directory of each off file and it's CAD id")
@@ -22,7 +24,7 @@ def transform_pcd(root_dir, ply_dir):
 
 chair_id_dict = {}
 i = 0
-number_of_chair_cad_models = 236778 #from shapenet
+# number_of_chair_cad_models = 236778 #from shapenet
 scenes = os.listdir(ROOTDIR)
 for scene in scenes:
     i += 1

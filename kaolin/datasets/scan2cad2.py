@@ -25,12 +25,11 @@ import pandas as pd
 
 from kaolin.rep.TriangleMesh import TriangleMesh
 from kaolin.transforms import transforms as tfs
-import pdb
-import open3d as o3d
+import pdb 
 
 
 #Based off of modelnet.py and its ModelNet dataset class
-class Scan2CAD(object):
+class Scan2CAD2(object):
     """ Dataset class for the Scan2CAD dataset of Scannet Chairs <-> CAD.
 
     Args:
@@ -63,7 +62,6 @@ class Scan2CAD(object):
                  transform: Optional[Callable] = None,
                  device: Optional[Union[torch.device, str]] = 'cpu'):
 
-        self.cad_root = '/media/sastrygrp2/My_Passport/ShapeNetCore.v2/03001627/'
         #To ensure same split every time
         np.random.seed(42)
 
@@ -89,12 +87,6 @@ class Scan2CAD(object):
 
             #Creates map to take CAD ID strings to numbers for prediction
             self.label_map = {self.unique_labels[i] : i for i in range(len(self.unique_labels))}
-
-            # pdb.set_trace()
-            shapenet_models = list(self.label_map.keys())
-            shapenet_labels = [shapenet_model for shapenet_model in shapenet_models]
-            shapenet_models = [self.cad_root + shapenet_model + '/models/manifold_model_normalized.obj' for shapenet_model in shapenet_models]
-
 
             #Creates inverse map to take predictions -> CAD ID strings
             self.pred_label_map = {}
@@ -135,10 +127,8 @@ class Scan2CAD(object):
             #creates train and validation set
             self.train_data_frame = pd.concat([data_frame.iloc[single_indices], rest_of_data_frame.iloc[train_sample_indices]])
             self.train_data_frame.reset_index(inplace=True)
-            self.train_filepaths =  self.train_data_frame['Filepath'].values.tolist()
-            self.train_filepaths += shapenet_models
-            self.train_cad_ids = self.train_data_frame['ID'].values.tolist()
-            self.train_cad_ids += shapenet_labels 
+            self.train_filepaths =  self.train_data_frame['Filepath']
+            self.train_cad_ids = self.train_data_frame['ID']
 
             self.validation_data_frame = rest_of_data_frame.iloc[val_indices]
             self.validation_data_frame.reset_index(inplace=True)
@@ -189,47 +179,21 @@ class Scan2CAD(object):
             return self.filepaths[index], data
 
         elif(self.split == 'train'):
-            # data = TriangleMesh.from_obj(self.train_filepaths[index])
+            data = TriangleMesh.from_obj(self.train_filepaths[index])
             cad_id = self.train_cad_ids[index]
             label = self.label_map[cad_id]
-
-            verifying_mesh = o3d.io.read_triangle_mesh(self.train_filepaths[index])
-            vertices = np.asarray(verifying_mesh.vertices)
-            faces = np.asarray(verifying_mesh.triangles)
-
-            vertices = torch.from_numpy(vertices).float()
-            faces = torch.from_numpy(faces).long()
-            data = TriangleMesh.from_tensors(vertices=vertices, faces=faces)
         
         elif(self.split == 'validation'):
-            # data = TriangleMesh.from_obj(self.validation_filepaths[index])
+            data = TriangleMesh.from_obj(self.validation_filepaths[index])
             cad_id = self.validation_cad_ids[index]
             label = self.label_map[cad_id]
-
-            verifying_mesh = o3d.io.read_triangle_mesh(self.validation_filepaths[index])
-            vertices = np.asarray(verifying_mesh.vertices)
-            faces = np.asarray(verifying_mesh.triangles)
-
-            vertices = torch.from_numpy(vertices).float()
-            faces = torch.from_numpy(faces).long()
-            data = TriangleMesh.from_tensors(vertices=vertices, faces=faces)
         
         elif(self.split == 'test'):
-            # data = TriangleMesh.from_obj(self.test_filepaths[index])
+            data = TriangleMesh.from_obj(self.test_filepaths[index])
             cad_id = self.test_cad_ids[index]
             label = self.label_map[cad_id]
 
-            verifying_mesh = o3d.io.read_triangle_mesh(self.test_filepaths[index])
-            vertices = np.asarray(verifying_mesh.vertices)
-            faces = np.asarray(verifying_mesh.triangles)
-
-            vertices = torch.from_numpy(vertices).float()
-            faces = torch.from_numpy(faces).long()
-            data = TriangleMesh.from_tensors(vertices=vertices, faces=faces)
-
-
-
-        
+        pdb.set_trace()
         label = torch.tensor(label, dtype=torch.long, device=self.device)
         data.to(self.device)
         
